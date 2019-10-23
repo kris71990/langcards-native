@@ -4,6 +4,7 @@ export const MID_GREY = '#727272';
 export const BASE = '#CAE0EC';
 export const HEADER_BORDER_TOP = '#58D295';
 export const HEADER_UNDERLINE = '#408EA3';
+export const HIGHLIGHT_GREEN = '#0A9E11';
 
 // // base
 // $base-background: #CAE0EC;

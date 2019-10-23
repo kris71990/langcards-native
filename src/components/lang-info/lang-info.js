@@ -7,30 +7,39 @@ import {
 import { supportedLanguages } from '../../utils/supported-langs';
 import styles from './lang-info.style';
 
+const InfoItemTextBlock = ({ text }) => {
+  return <Text style={ styles.infoTextBlock }>{ text }</Text>;
+};
+
+const InfoItemTitle = ({ text }) => {
+  return <Text style={ styles.infoTextTitle }>{ text }</Text>;
+};
+
 function Language({ data, state }) {
   const { showMoreInfoIndex } = state;
   const languageKey = parseInt(data.key, 10);
   return (
     <View style={ styles.langContainer }>
-      <Text>{ data.name }</Text>
-      <View style={ styles.moreInfoContainer }>
-        {
-          showMoreInfoIndex === languageKey ? <Text>{ data.localName }</Text> : null
-        }
-      </View>
+      <Text 
+        style={ showMoreInfoIndex === languageKey ? styles.selectedLanguage : styles.unselectedLanguage }>{ data.name }
+      </Text>
+      {
+        showMoreInfoIndex === languageKey ?
+          <View style={ styles.moreInfoContainer }>
+            <InfoItemTitle text="Locally known as ..."/>
+            <InfoItemTextBlock text={ data.localName ? data.localName : data.name }/>
+            <InfoItemTitle text="Spoken by ..."/>
+            <InfoItemTextBlock text={ `${data.totalSpeakers} people` }/>
+            <InfoItemTitle text="Spoken in ..."/>
+            <InfoItemTextBlock text={ data.spokenIn.join(', ') }/>
+            <InfoItemTitle text="Family tree ..."/>
+            <InfoItemTextBlock text={ data.family.join(' --> ') }/>
+          </View>
+          : null
+      }
     </View>
   );
 }
-
-// function MoreInfo({ data, state }) {
-//   return (
-//     <View style={ styles.moreInfoContainer }>
-//       {
-//         showMoreInfoIndex === languageKey ? <Text>{ data.localName }</Text> : null
-//       }
-//     </View>
-//   );
-// }
 
 class LanguageInfo extends React.Component {
   constructor(props) {
@@ -89,8 +98,12 @@ Language.propTypes = {
   state: PropTypes.object,
 };
 
-// MoreInfo.propTypes = {
-//   data: PropTypes.object,
-// }
+InfoItemTitle.propTypes = {
+  text: PropTypes.string,
+};
+
+InfoItemTextBlock.propTypes = {
+  text: PropTypes.string,
+};
 
 export default LanguageInfo;
