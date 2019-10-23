@@ -1,16 +1,16 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  langContainer: {
-    flexDirection: 'column',
-    height: 100,
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'black',
-    alignContent: 'center',
+  title: {
+    fontSize: 30,
+    padding: 20,
+    textDecorationLine: 'underline',
   },
-  langText: {
-    textAlign: 'center',
-    color: 'red',
+  listContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  langContainer: {
+    margin: 10,
   },
 });

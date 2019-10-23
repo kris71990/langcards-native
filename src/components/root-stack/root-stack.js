@@ -12,7 +12,7 @@ import * as colors from '../../style/colors';
 const TabNavigator = createBottomTabNavigator(
   {
     Home: { screen: Home },
-    Languages: { screen: LanguageInfo },
+    Info: { screen: LanguageInfo },
     Profile: { screen: Profile },
   },
   {
@@ -23,11 +23,11 @@ const TabNavigator = createBottomTabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Languages':
+          case 'Info':
             iconName = 'ios-information-circle';
             break;
-          case 'Settings':
-            iconName = 'ios-settings';
+          case 'Profile':
+            iconName = 'md-contact';
             break;
           default:
             iconName = 'ios-home';
