@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  profileContainer: {
+  langContainer: {
     flexDirection: 'column',
     height: 100,
     justifyContent: 'center',
@@ -9,7 +9,7 @@ export default StyleSheet.create({
     borderColor: 'black',
     alignContent: 'center',
   },
-  profileText: {
+  langText: {
     textAlign: 'center',
     color: 'red',
   },

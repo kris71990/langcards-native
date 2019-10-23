@@ -1,5 +1,6 @@
 export const HEADER_BACKGROUND = '#0F447C'; // #295599
 export const HEADER_MENU = '#29C0E9';
+export const MID_GREY = '#727272';
 
 // // base
 // $base-background: #CAE0EC;

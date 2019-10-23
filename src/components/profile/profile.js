@@ -5,16 +5,17 @@ import { View, Text } from 'react-native';
 import styles from './profile.style';
 
 class Profile extends React.Component {
-  static navigationOptions = {
-    title: 'Profile',
+  static navigationOptions = ({ navigation }) => {
+    const username = navigation.getParam('name', null);
+    return {
+      title: username ? username : 'Profile',
+    };
   };
 
   render() {
-    const { navigation } = this.props;
-
     return (
       <View style={ styles.profileContainer }>
-        <Text style={ styles.profileText }>Welcome, { JSON.stringify(navigation.getParam('name', undefined)) }</Text>
+        <Text style={ styles.profileText }>Profile View</Text>
       </View>
     );
   }

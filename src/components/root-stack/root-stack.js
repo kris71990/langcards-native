@@ -1,26 +1,49 @@
+import React from 'react';
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Home from '../home/home';
 import Profile from '../profile/profile';
+import LanguageInfo from '../lang-info/lang-info';
 
 import * as colors from '../../style/colors';
 
-const MainNavigator = createStackNavigator(
+const TabNavigator = createBottomTabNavigator(
   {
     Home: { screen: Home },
+    Languages: { screen: LanguageInfo },
     Profile: { screen: Profile },
   },
   {
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: colors.HEADER_BACKGROUND,
+    defaultNavigationOptions: ({ navigation }) => ({
+      /* eslint react/display-name: 0 */
+      /* eslint react/prop-types: 0 */
+      tabBarIcon: ({ tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        switch (routeName) {
+          case 'Languages':
+            iconName = 'ios-information-circle';
+            break;
+          case 'Settings':
+            iconName = 'ios-settings';
+            break;
+          default:
+            iconName = 'ios-home';
+        }
+        return <Icon name={ iconName } size={ 25 } color={ tintColor }/>;
       },
-      headerTintColor: colors.HEADER_MENU,
+    }),
+    tabBarOptions: {
+      activeBackgroundColor: colors.HEADER_BACKGROUND,
+      activeTintColor: colors.HEADER_MENU,
+      inactiveBackgroundColor: colors.MID_GREY,
+      inactiveTintColor: 'black',
     },
   },
 );
 
-const RootStack = createAppContainer(MainNavigator);
+const RootStack = createAppContainer(TabNavigator);
 
 export default RootStack;
