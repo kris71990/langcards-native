@@ -22,4 +22,7 @@ export default StyleSheet.create({
     padding: 10,
     backgroundColor: '#67BFF4',
   },
+  moreInfoContainer: {
+    backgroundColor: 'green',
+  },
 });
