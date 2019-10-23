@@ -25,6 +25,7 @@ class LanguageInfo extends React.Component {
       <SafeAreaView style={ styles.listContainer }>
         <Text style={ styles.title }>Languages</Text>
         <FlatList
+          style={ styles.flatList }
           data={ supportedLanguages }
           renderItem={({ item }) => <Language name={ item.name }/>}
           keyExtractor={ (item) => item.key }

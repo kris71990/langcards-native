@@ -3,6 +3,7 @@ export const HEADER_MENU = '#29C0E9';
 export const MID_GREY = '#727272';
 export const BASE = '#CAE0EC';
 export const HEADER_BORDER_TOP = '#58D295';
+export const HEADER_UNDERLINE = '#408EA3';
 
 // // base
 // $base-background: #CAE0EC;

@@ -18,7 +18,7 @@ export const supportedLanguages = [ // eslint-disable-line
     spokenIn: ['Egypt', 'Algeria', 'Sudan', 'Saudi Arabia', 'Morocco', 'Iraq', 'Syria', 'Yemen', 'Tunisia', 'Jordan', 'Libya', 'Lebanon', 'Somalia', 'United Arab Emirates', 'Mauritania', 'Oman', 'Israel', 'Kuwait', 'Palestine', 'Chad', 'Qatar', 'Bahrain', 'Eritrea', 'Djibouti'], 
   },
   {
-    name: 'bengali',
+    name: 'Bengali',
     key: '2',
     transliteration: true,
     localName: 'বাংলা',
@@ -216,7 +216,7 @@ export const supportedLanguages = [ // eslint-disable-line
     spokenIn: ['Brazil', 'Angola', 'Mozambique', 'Portugal', 'Guinea-Bissau', 'East Timor', 'Equatorial Guinea', 'Macao', 'Cape Verde', 'Sao Tome and Principe'],
   },
   {
-    name: 'russian',
+    name: 'Russian',
     key: '24', 
     transliteration: true, 
     localName: 'русский',
