@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { 
-  View, Text, SafeAreaView, TouchableOpacity,
+  View, Text, SafeAreaView, TouchableOpacity, Button,
 } from 'react-native';
 
 import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
+import AuthLanding from '../auth-landing/auth-landing';
 import { supportedLanguages } from '../../utils/supported-langs';
 import styles from './lang-info.style';
 import headers from '../../style/headers';
@@ -54,6 +55,12 @@ class LanguageInfo extends React.Component {
 
   static navigationOptions = {
     title: 'Info',
+    headerTitle: () => <AuthLanding/>,
+    headerRight: () => (
+      <Button
+        title="Login"
+      />
+    ),
   };
 
   toggleInfo = (index) => {
