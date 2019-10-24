@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { 
-  View, Text, SafeAreaView, FlatList, TouchableOpacity, Animated,
+  View, Text, SafeAreaView, TouchableOpacity,
 } from 'react-native';
 
+import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
 import { supportedLanguages } from '../../utils/supported-langs';
 import styles from './lang-info.style';
+import headers from '../../style/headers';
 
 const InfoItemTextBlock = ({ text }) => {
   return <Text style={ styles.infoTextBlock }>{ text }</Text>;
@@ -14,7 +16,6 @@ const InfoItemTextBlock = ({ text }) => {
 const InfoItemTitle = ({ text }) => {
   return <Text style={ styles.infoTextTitle }>{ text }</Text>;
 };
-
 
 const Language = ({ data, state }) => {
   const { showMoreInfoIndex } = state;
@@ -39,32 +40,6 @@ const Language = ({ data, state }) => {
           : null
       }
     </View>
-  );
-};
-
-const FadeInFlatList = (props) => {
-  const [fadeIn] = useState(new Animated.Value(0.2));
-  const { data, keyExtractor, renderItem, style } = props;
-
-  useEffect(() => {
-    Animated.timing(
-      fadeIn,
-      {
-        toValue: 1,
-        duration: 3000,
-      },
-    ).start();
-  }, []);
-
-  return (
-    <Animated.FlatList
-      style={{ ...style, opacity: fadeIn }}
-      data={ data }
-      keyExtractor={ keyExtractor }
-      renderItem={ renderItem }
-    >
-      { props.children }
-    </Animated.FlatList>
   );
 };
 
@@ -102,8 +77,8 @@ class LanguageInfo extends React.Component {
   render() {
     return (
       <SafeAreaView style={ styles.listContainer }>
-        <Text style={ styles.title }>Languages</Text>
-        <FadeInFlatList
+        <Text style={ headers.title }>Languages</Text>
+        <AnimatedFlatList
           style={ styles.flatList }
           data={ supportedLanguages }
           renderItem={({ item, index }) => { 

@@ -4,11 +4,6 @@ import {
 } from '../../style/colors';
 
 export default StyleSheet.create({
-  title: {
-    fontSize: 30,
-    padding: 20,
-    textAlign: 'center',
-  },
   flatList: {
     flex: 1,
     borderTopColor: HEADER_UNDERLINE,

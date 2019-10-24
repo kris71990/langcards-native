@@ -1,16 +1,19 @@
 import { StyleSheet } from 'react-native';
+import { HEADER_UNDERLINE } from '../../style/colors';
 
 export default StyleSheet.create({
-  profileContainer: {
-    flexDirection: 'column',
-    height: 100,
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'black',
-    alignContent: 'center',
+  profileViewContainer: {
+    borderTopColor: HEADER_UNDERLINE,
+    borderTopWidth: 10,
   },
-  profileText: {
-    textAlign: 'center',
-    color: 'red',
+  tableContainer: {
+    borderWidth: 1,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    
+  },
+  row: {
+    flex: 1, 
   },
 });

@@ -3,6 +3,28 @@ import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 
 import styles from './profile.style';
+import headers from '../../style/headers';
+
+const Table = () => {
+  function renderRow(x, i) {
+    return (
+      <View key={ i } style={ styles.rowContainer }>
+        <View style={ styles.row }><Text>{ x * 2 }</Text></View>
+        <View style={ styles.row }><Text>{ x * 4 }</Text></View>
+        <View style={ styles.row }><Text>{ x * 6 }</Text></View>
+      </View>
+    );
+  }
+
+  const data = [1, 2, 3, 4, 5];
+  return (
+    <View style={ styles.tableContainer }>
+      {
+        data.map((x, i) => renderRow(x, i))
+      }
+    </View>
+  );
+};
 
 class Profile extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -15,7 +37,11 @@ class Profile extends React.Component {
   render() {
     return (
       <View style={ styles.profileContainer }>
-        <Text style={ styles.profileText }>Profile View</Text>
+        <View><Text style={ headers.title }>Welcome, NAME</Text></View>
+        <View style={ styles.profileViewContainer }>
+          <Text>Account Age: ACCOUNT_AGE</Text>
+          <Table/>
+        </View>
       </View>
     );
   }
