@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { 
-  View, Text, SafeAreaView, FlatList, TouchableOpacity,
+  View, Text, SafeAreaView, FlatList, TouchableOpacity, Animated,
 } from 'react-native';
 
 import { supportedLanguages } from '../../utils/supported-langs';
@@ -15,7 +15,8 @@ const InfoItemTitle = ({ text }) => {
   return <Text style={ styles.infoTextTitle }>{ text }</Text>;
 };
 
-function Language({ data, state }) {
+
+const Language = ({ data, state }) => {
   const { showMoreInfoIndex } = state;
   const languageKey = parseInt(data.key, 10);
   return (
@@ -39,7 +40,33 @@ function Language({ data, state }) {
       }
     </View>
   );
-}
+};
+
+const FadeInFlatList = (props) => {
+  const [fadeIn] = useState(new Animated.Value(0.2));
+  const { data, keyExtractor, renderItem, style } = props;
+
+  useEffect(() => {
+    Animated.timing(
+      fadeIn,
+      {
+        toValue: 1,
+        duration: 3000,
+      },
+    ).start();
+  }, []);
+
+  return (
+    <Animated.FlatList
+      style={{ ...style, opacity: fadeIn }}
+      data={ data }
+      keyExtractor={ keyExtractor }
+      renderItem={ renderItem }
+    >
+      { props.children }
+    </Animated.FlatList>
+  );
+};
 
 class LanguageInfo extends React.Component {
   constructor(props) {
@@ -76,7 +103,7 @@ class LanguageInfo extends React.Component {
     return (
       <SafeAreaView style={ styles.listContainer }>
         <Text style={ styles.title }>Languages</Text>
-        <FlatList
+        <FadeInFlatList
           style={ styles.flatList }
           data={ supportedLanguages }
           renderItem={({ item, index }) => { 

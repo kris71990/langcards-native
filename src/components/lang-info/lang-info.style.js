@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { HEADER_UNDERLINE, HIGHLIGHT_GREEN } from '../../style/colors';
+import { 
+  HEADER_UNDERLINE, DARK_RED, LIST_LIGHT_BLUE, LIST_BORDER, 
+} from '../../style/colors';
 
 export default StyleSheet.create({
   title: {
@@ -20,14 +22,14 @@ export default StyleSheet.create({
   langContainer: {
     flex: 1,
     color: 'red',
-    borderBottomWidth: 1,
-    borderBottomColor: '#2A5068',
+    borderBottomWidth: 2,
+    borderBottomColor: LIST_BORDER,
     padding: 10,
-    backgroundColor: '#67BFF4',
+    backgroundColor: LIST_LIGHT_BLUE,
   },
   moreInfoContainer: {
-    borderWidth: 2,
-    borderColor: HIGHLIGHT_GREEN,
+    borderWidth: 1,
+    borderColor: DARK_RED,
     backgroundColor: 'white',
     marginTop: 5,
     padding: 10,
@@ -46,12 +48,13 @@ export default StyleSheet.create({
   },
   selectedLanguage: {
     letterSpacing: 2,
-    color: HIGHLIGHT_GREEN,
+    color: DARK_RED,
     textDecorationLine: 'underline',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 25,
   },
   unselectedLanguage: {
+    fontSize: 20,
     letterSpacing: 1,
   },
 });
