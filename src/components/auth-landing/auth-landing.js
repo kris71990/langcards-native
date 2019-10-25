@@ -49,13 +49,15 @@ class AuthLanding extends React.Component {
     const { navigation } = this.props;
 
     return (
-      <ScrollView>
+      <ScrollView style={ styles.authBackground }>
         <View>
           <Text style={ [headers.title, styles.title] }>{ this.state.version }</Text>
           <View style={ styles.authContainer }>
             <TextInput
               style={ styles.textInput }
               placeholder="Username"
+              placeholderTextColor="white"
+              borderColor="transparent"
               onBlur={ Keyboard.dismiss }
               value={ this.state.name }
               onChangeText={ this.handleChangeUsername }
@@ -63,6 +65,9 @@ class AuthLanding extends React.Component {
             <TextInput
               style={ styles.textInput }
               placeholder="Password"
+              placeholderTextColor="white"
+              underlineColorAndroid="transparent"
+              secureTextEntry={ true }
               onBlur={ Keyboard.dismiss }
               value={ this.state.password }
               onChangeText={ this.handleChangePassword }
@@ -72,6 +77,8 @@ class AuthLanding extends React.Component {
                 ? <TextInput
                   style={ styles.textInput }
                     placeholder="Email"
+                    placeholderTextColor="white"
+                    underlineColorAndroid="transparent"
                     onBlur={ Keyboard.dismiss }
                     value={ this.state.password }
                     onChangeText={ this.handleChangePassword }
@@ -83,7 +90,7 @@ class AuthLanding extends React.Component {
                 style={ styles.authButtons }
                 onPress={ () => Alert.alert('SUBMITTED') }
               >
-                <Text style={ styles.buttonText }>Submit</Text>
+                <Text style={ styles.buttonText }>{ this.state.version }</Text>
               </TouchableOpacity>
               <TouchableOpacity 
                 style={ styles.authButtons }

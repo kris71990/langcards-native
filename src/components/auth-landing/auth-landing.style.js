@@ -1,21 +1,29 @@
 import { StyleSheet } from 'react-native';
-import { HEADER_UNDERLINE, GUEST_BUTTON } from '../../style/colors';
+import { 
+  HEADER_UNDERLINE, GUEST_BUTTON, BASE, MID_GREY,
+} from '../../style/colors';
 
 export default StyleSheet.create({
   title: {
     borderBottomColor: HEADER_UNDERLINE,
-    borderBottomWidth: 10,
+    borderBottomWidth: 30,
+  },
+
+  authBackground: {
+    backgroundColor: BASE,
   },
   
   authContainer: {
-    marginTop: 20,
-    backgroundColor: 'red',
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: MID_GREY,
+    backgroundColor: GUEST_BUTTON,
   },
 
   textInput: {
-    borderColor: 'black',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderBottomColor: MID_GREY,
+    borderBottomWidth: 2,
+    borderStyle: 'dashed',
     height: 80,
     fontSize: 25,
     paddingLeft: 20,
