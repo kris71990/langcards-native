@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { 
-  View, Text, SafeAreaView, TouchableOpacity, Button, Alert,
+  View, Text, SafeAreaView, TouchableOpacity, Button,
 } from 'react-native';
 
 import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
-import AuthLanding from '../auth-landing/auth-landing';
+import { resetHomeStack } from '../../utils/home-stack-actions';
+
 import { supportedLanguages } from '../../utils/supported-langs';
 import styles from './lang-info.style';
 import headers from '../../style/headers';
@@ -83,7 +84,7 @@ class LanguageInfo extends React.Component {
         <View>
           <Button
             title="Login"
-            onPress={ () => navigation.navigate('Home') }
+            onPress={ () => navigation.dispatch(resetHomeStack) }
           />
         </View>
         <Text style={ headers.title }>Languages</Text>

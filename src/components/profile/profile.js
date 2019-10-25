@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, Button } from 'react-native';
 
+import { goToCards } from '../../utils/home-stack-actions';
+
 import styles from './profile.style';
 import headers from '../../style/headers';
 
@@ -42,7 +44,7 @@ class Profile extends React.Component {
         <View>
           <Button
             title="Login"
-            onPress={ () => navigation.navigate('Home') }
+            onPress={ () => navigation.dispatch(goToCards) }
           />
         </View>
         <View><Text style={ headers.title }>Welcome, NAME</Text></View>

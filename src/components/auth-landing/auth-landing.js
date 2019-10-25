@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ScrollView, View, Text, Button, TextInput, Keyboard, Alert, TouchableOpacity,
+  ScrollView, View, Text, TextInput, Keyboard, Alert, TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-// import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from 'react-navigation-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import Home from '../home/home';
@@ -11,10 +11,21 @@ import AuthLanding from '../auth-landing/auth-landing';
 
 import * as colors from '../../style/colors';
 
+const HomeStack = createStackNavigator(
+  {
+    Root: { screen: AuthLanding },
+    Cards: { screen: Home },
+  },
+  {
+    initialRouteName: 'Root',
+    headerMode: 'none',
+  },
+);
+
 const TabNavigator = createBottomTabNavigator(
   {
-    Home: { screen: AuthLanding },
-    Cards: { screen: Home },
+    Home: { screen: HomeStack },
+    // Cards: { screen: Home },
     Info: { screen: LanguageInfo },
     Profile: { screen: Profile },
   },
