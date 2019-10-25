@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { 
-  View, Text, SafeAreaView, TouchableOpacity,
+  View, Text, SafeAreaView, TouchableOpacity, Button,
 } from 'react-native';
 
 import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
+import { resetHomeStack } from '../../utils/home-stack-actions';
+
 import { supportedLanguages } from '../../utils/supported-langs';
 import styles from './lang-info.style';
 import headers from '../../style/headers';
@@ -75,8 +77,16 @@ class LanguageInfo extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <SafeAreaView style={ styles.listContainer }>
+        <View>
+          <Button
+            title="Login"
+            onPress={ () => navigation.dispatch(resetHomeStack) }
+          />
+        </View>
         <Text style={ headers.title }>Languages</Text>
         <AnimatedFlatList
           style={ styles.flatList }
@@ -94,6 +104,10 @@ class LanguageInfo extends React.Component {
     );
   }
 }
+
+LanguageInfo.propTypes = {
+  navigation: PropTypes.object,
+};
 
 Language.propTypes = {
   data: PropTypes.object,

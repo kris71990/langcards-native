@@ -28,11 +28,11 @@ import styles from './home.style';
 
 class Home extends React.Component {
   static navigationOptions = {
-    title: 'Home',
+    title: 'Cards',
   };
 
   render() {
-    const { navigate } = this.props.navigation;
+    const { navigation } = this.props;
 
     return (
       <>
@@ -41,16 +41,18 @@ class Home extends React.Component {
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
+            <View>
+              <Button
+                title="Login"
+                onPress={ () => navigation.navigate('Home') }
+              />
+            </View>
             <Header />
             {global.HermesInternal == null ? null : (
               <View style={styles.engine}>
                 <Text style={styles.footer}>Engine: Hermes</Text>
               </View>
             )}
-            <Button 
-              title="Profile"
-              onPress={ () => navigate('Profile', { name: 'Kris' })}
-            />
             <View style={styles.body}>
               <View style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}>Step One</Text>

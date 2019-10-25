@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
+
+import { goToCards } from '../../utils/home-stack-actions';
 
 import styles from './profile.style';
 import headers from '../../style/headers';
@@ -35,8 +37,16 @@ class Profile extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <View style={ styles.profileContainer }>
+        <View>
+          <Button
+            title="Login"
+            onPress={ () => navigation.dispatch(goToCards) }
+          />
+        </View>
         <View><Text style={ headers.title }>Welcome, NAME</Text></View>
         <View style={ styles.profileViewContainer }>
           <Text>Account Age: ACCOUNT_AGE</Text>
