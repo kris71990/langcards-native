@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { 
-  View, Text, SafeAreaView, TouchableOpacity, Button,
+  View, Text, SafeAreaView, TouchableOpacity, Button, Alert,
 } from 'react-native';
 
 import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
@@ -55,12 +55,6 @@ class LanguageInfo extends React.Component {
 
   static navigationOptions = {
     title: 'Info',
-    headerTitle: () => <AuthLanding/>,
-    headerRight: () => (
-      <Button
-        title="Login"
-      />
-    ),
   };
 
   toggleInfo = (index) => {
@@ -82,8 +76,16 @@ class LanguageInfo extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <SafeAreaView style={ styles.listContainer }>
+        <View>
+          <Button
+            title="Login"
+            onPress={ () => navigation.navigate('Home') }
+          />
+        </View>
         <Text style={ headers.title }>Languages</Text>
         <AnimatedFlatList
           style={ styles.flatList }
@@ -101,6 +103,10 @@ class LanguageInfo extends React.Component {
     );
   }
 }
+
+LanguageInfo.propTypes = {
+  navigation: PropTypes.object,
+};
 
 Language.propTypes = {
   data: PropTypes.object,

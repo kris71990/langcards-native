@@ -8,6 +8,7 @@ export const HIGHLIGHT_GREEN = '#0A9E11';
 export const DARK_RED = '#C60A0A';
 export const LIST_LIGHT_BLUE = '#67BFF4';
 export const LIST_BORDER = '#2A5068';
+export const GUEST_BUTTON = '#7894B8';
 
 // // base
 // $base-background: #CAE0EC;
