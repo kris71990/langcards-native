@@ -14,8 +14,11 @@ import {
   Button,
   Text,
 } from 'react-native';
+import { connect } from 'react-redux';
 
-import autobind from '../../utils/autobind';
+import * as languageActions from '../../actions/language';
+
+import autoBind from '../../utils/autobind';
 import { resetHomeStack } from '../../utils/home-stack-actions';
 // import AnimatedFlatlist from '../animated-flatlist/animated-flatlist';
 import styles from './home.style';
@@ -27,12 +30,17 @@ class Home extends React.Component {
       authError: false,
       toggleMenu: false, 
     };
-    autobind.call(this, Home);
+    autoBind.call(this, Home);
   }
 
   static navigationOptions = {
     title: 'Cards',
   };
+
+  componentDidMount() {
+    // if (this.props.token) this.props.fetchProfile();
+    return this.props.languagesFetch();
+  }
 
   handleToggle() {
     return this.setState({
@@ -42,13 +50,11 @@ class Home extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     const { navigation } = this.props;
-    // const { 
-    //   languages, languageSelection, translationDirection, 
-    // } = this.props.language;
-    let languageSelection;
-    let translationDirection;
-    let languages;
+    const { 
+      languages, languageSelection, translationDirection, 
+    } = this.props.language;
     const { toggleMenu, authError } = this.state;
 
     let formattedLangSelect;
@@ -112,6 +118,28 @@ class Home extends React.Component {
 Home.propTypes = {
   navigation: PropTypes.object,
   language: PropTypes.object,
+  languagesFetch: PropTypes.func,
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    language: state.language,
+    // token: state.auth,
+    // profile: state.profile,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  languagesFetch: () => dispatch(languageActions.languagesFetchRequest()),
+  // setLanguage: lang => dispatch(languageActions.languageSelect(lang)),
+  // setTransDir: dir => dispatch(languageActions.languageTransDirSet(dir)),
+  // createLanguage: lang => dispatch(languageActions.languageCreateRequest(lang)),
+  // wordsFetch: lang => dispatch(wordActions.wordsFetchRequest(lang)),
+  // signup: user => dispatch(authActions.signupRequest(user)),
+  // login: user => dispatch(authActions.loginRequest(user)),
+  // createProfile: username => dispatch(profileActions.createProfileReq(username)),
+  // fetchProfile: () => dispatch(profileActions.fetchProfileReq()),
+  // updateProfile: (profile, lang, words) => dispatch(profileActions.updateProfileReq(profile, lang, words)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
