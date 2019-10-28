@@ -9,7 +9,7 @@ export default StyleSheet.create({
     borderBottomWidth: 30,
   },
 
-  authBackground: {
+  homeBackground: {
     backgroundColor: BASE,
   },
   

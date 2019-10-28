@@ -49,7 +49,7 @@ class AuthLanding extends React.Component {
     const { navigation } = this.props;
 
     return (
-      <ScrollView style={ styles.authBackground }>
+      <ScrollView style={ styles.homeBackground }>
         <View>
           <Text style={ [headers.title, styles.title] }>{ this.state.version }</Text>
           <View style={ styles.authContainer }>
