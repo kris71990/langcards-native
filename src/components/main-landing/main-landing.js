@@ -16,21 +16,22 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 
-import * as languageActions from '../../actions/language';
+import LanguageMenu from '../language-menu/language-menu';
 
+import * as languageActions from '../../actions/language';
 import autoBind from '../../utils/autobind';
 import { resetHomeStack } from '../../utils/home-stack-actions';
-// import AnimatedFlatlist from '../animated-flatlist/animated-flatlist';
-import styles from './home.style';
 
-class Home extends React.Component {
+import styles from './main-landing.style';
+
+class MainLanding extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       authError: false,
       toggleMenu: false, 
     };
-    autoBind.call(this, Home);
+    autoBind.call(this, MainLanding);
   }
 
   static navigationOptions = {
@@ -50,7 +51,6 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const { navigation } = this.props;
     const { 
       languages, languageSelection, translationDirection, 
@@ -58,6 +58,8 @@ class Home extends React.Component {
     const { toggleMenu, authError } = this.state;
 
     let formattedLangSelect;
+    let currentLangs;
+    if (languages) currentLangs = languages.map((lang) => lang.languageName);
 
     return (
       <ScrollView style={ styles.homeBackground }>
@@ -84,7 +86,9 @@ class Home extends React.Component {
           <View style={ styles.sectionContainer }>
             { // render add language menu component here
               toggleMenu
-                ? <Text style={ styles.sectionTitle }>Add Language Menu</Text>
+                ? <LanguageMenu
+                    currentLangs={ currentLangs }
+                  />
                 : null
             }
           </View>
@@ -115,7 +119,7 @@ class Home extends React.Component {
   }
 }
 
-Home.propTypes = {
+MainLanding.propTypes = {
   navigation: PropTypes.object,
   language: PropTypes.object,
   languagesFetch: PropTypes.func,
@@ -142,4 +146,4 @@ const mapDispatchToProps = (dispatch) => ({
   // updateProfile: (profile, lang, words) => dispatch(profileActions.updateProfileReq(profile, lang, words)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(MainLanding);
