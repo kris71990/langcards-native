@@ -1,15 +1,16 @@
 import { StyleSheet } from 'react-native';
-import { BASE } from '../../style/colors';
+import { BASE, LIST_LIGHT_GREEN } from '../../style/colors';
 
 
 export default StyleSheet.create({
   homeBackground: {
     flex: 1,
     backgroundColor: BASE,
+    borderTopColor: LIST_LIGHT_GREEN,
+    borderTopWidth: 5,
   },
   sectionContainer: {
-    // flex: 1,
-    marginTop: 32,
+    marginTop: 20,
     paddingHorizontal: 24,
   },
   sectionContainerTwo: {
@@ -18,19 +19,11 @@ export default StyleSheet.create({
   headerTitle: {
     textAlign: 'center',
     paddingBottom: 10,
-    fontSize: 24,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: 'bold',
   },
   headerConjunction: {
     textAlign: 'center',
     paddingBottom: 10,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
   },
 });

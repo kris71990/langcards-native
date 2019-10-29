@@ -13,6 +13,7 @@ import {
   View,
   Button,
   Text,
+  ActivityIndicator,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -98,7 +99,7 @@ class MainLanding extends React.Component {
           { // render language choice menu component
             languages
               ? <LanguagePanel languages={ languages }/>
-              : <Text>Server not responding</Text>
+              : <ActivityIndicator size="large"/>
           }
           { // render translation choice component
             formattedLangSelect 

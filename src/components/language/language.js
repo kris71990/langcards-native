@@ -41,7 +41,7 @@ const LanguageChoiceInfo = ({ data, state }) => {
 const LanguageChoicePanel = ({ data }) => {
   return (
     <View style={ styles.langPanelContainer }>
-      <Text style={ styles.langName }>
+      <Text style={ [styles.langName, styles.unselectedLanguage] }>
       { `${data.languageName.charAt(0).toUpperCase()}${data.languageName.slice(1)}` }
       </Text>
       <Text style={ styles.wordCount }>{ data.wordCount }</Text>

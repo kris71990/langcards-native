@@ -5,8 +5,9 @@ export default StyleSheet.create({
   langPanelContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderWidth: 1, 
-    backgroundColor: 'white',
+    borderBottomWidth: 2, 
+    backgroundColor: colors.LIST_LIGHT_GREEN,
+    borderBottomColor: colors.LIST_BORDER,
     padding: 10,
   },
   langName: {
@@ -14,15 +15,17 @@ export default StyleSheet.create({
   },  
   wordCount: {
     paddingRight: 30,
-    color: 'red',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: colors.DARK_RED,
   },
   langInfoContainer: {
     flex: 1,
-    color: 'red',
+    color: colors.DARK_RED,
     borderBottomWidth: 2,
     borderBottomColor: colors.LIST_BORDER,
-    padding: 10,
     backgroundColor: colors.LIST_LIGHT_BLUE,
+    padding: 10,
   },
   moreInfoContainer: {
     borderWidth: 1,

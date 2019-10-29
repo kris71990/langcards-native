@@ -1,7 +1,5 @@
 import React from 'react';
-import { 
-  ScrollView, View, Picker,
-} from 'react-native';
+import { View, Picker } from 'react-native';
 import PropTypes from 'prop-types';
 
 import autoBind from '../../utils/autobind';
@@ -36,28 +34,26 @@ class LanguageMenu extends React.Component {
     });
 
     return (
-      <ScrollView>
-        <View>
-        {
-          availableLangs ? 
-            <Picker
-              style={ styles.picker }
-              selectedValue={ this.state.selectedLanguage }
-              onValueChange={(itemValue) => {
-                this.setState({ selectedLanguage: itemValue });
-              }}>
-              {
-                availableLangs.map((lang) => {
-                  return (
-                    <Picker.Item key={ lang } label={`${lang.charAt(0).toUpperCase()}${lang.slice(1)}`} value={ lang }/>
-                  );
-                })
-              }
-            </Picker>
-            : null
-        }
-        </View>
-      </ScrollView>
+      <View style={ styles.pickerContainer }>
+      {
+        availableLangs ? 
+          <Picker
+            style={ styles.picker }
+            selectedValue={ this.state.selectedLanguage }
+            onValueChange={(itemValue) => {
+              this.setState({ selectedLanguage: itemValue });
+            }}>
+            {
+              availableLangs.map((lang) => {
+                return (
+                  <Picker.Item key={ lang } label={`${lang.charAt(0).toUpperCase()}${lang.slice(1)}`} value={ lang }/>
+                );
+              })
+            }
+          </Picker>
+          : null
+      }
+      </View>
     );
   }
 }

@@ -10,18 +10,4 @@ export default StyleSheet.create({
     borderTopColor: HEADER_UNDERLINE,
     borderTopWidth: 10,
   },
-  // langContainer: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   borderWidth: 1, 
-  //   backgroundColor: 'white',
-  //   padding: 10,
-  // },
-  // langName: {
-  //   paddingLeft: 30,
-  // },  
-  // wordCount: {
-  //   paddingRight: 30,
-  //   color: 'red',
-  // },
 });

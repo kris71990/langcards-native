@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { HEADER_UNDERLINE } from '../../style/colors';
+import { HEADER_UNDERLINE, LIST_LIGHT_BLUE } from '../../style/colors';
 
 export default StyleSheet.create({
   flatList: {
@@ -11,5 +11,7 @@ export default StyleSheet.create({
     flex: 1,
     borderBottomWidth: 10,
     borderBottomColor: HEADER_UNDERLINE,
+    borderTopColor: LIST_LIGHT_BLUE,
+    borderTopWidth: 5,
   },
 });
