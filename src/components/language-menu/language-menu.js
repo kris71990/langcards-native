@@ -29,32 +29,33 @@ class LanguageMenu extends React.Component {
     const { currentLangs } = this.props;
     const languageList = supportedLanguages.map((lang) => lang.name.toLowerCase());
     const availableLangs = languageList.filter((lang) => {
-      if (!currentLangs.includes(lang)) return lang;
+      if (!currentLangs.includes(lang)) {
+        return lang;
+      }
       return null;
     });
 
     return (
       <ScrollView>
         <View>
-          <Text>LANGUAGE MENU</Text>
-          {
-            availableLangs ? 
-              <Picker
-                style={ styles.picker }
-                selectedValue={ this.state.selectedLanguage }
-                onValueChange={(itemValue) => {
-                  this.setState({ selectedLanguage: itemValue });
-                }}>
-                {
-                  availableLangs.map((lang) => {
-                    return (
-                      <Picker.Item key={ lang } label={`${lang.charAt(0).toUpperCase()}${lang.slice(1)}`} value={ lang }/>
-                    );
-                  })
-                }
-              </Picker>
-              : null
-          }
+        {
+          availableLangs ? 
+            <Picker
+              style={ styles.picker }
+              selectedValue={ this.state.selectedLanguage }
+              onValueChange={(itemValue) => {
+                this.setState({ selectedLanguage: itemValue });
+              }}>
+              {
+                availableLangs.map((lang) => {
+                  return (
+                    <Picker.Item key={ lang } label={`${lang.charAt(0).toUpperCase()}${lang.slice(1)}`} value={ lang }/>
+                  );
+                })
+              }
+            </Picker>
+            : null
+        }
         </View>
       </ScrollView>
     );

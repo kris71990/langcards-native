@@ -9,7 +9,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  ScrollView,
+  SafeAreaView,
   View,
   Button,
   Text,
@@ -17,6 +17,7 @@ import {
 import { connect } from 'react-redux';
 
 import LanguageMenu from '../language-menu/language-menu';
+import LanguagePanel from '../language-panel/language-panel';
 
 import * as languageActions from '../../actions/language';
 import autoBind from '../../utils/autobind';
@@ -62,7 +63,7 @@ class MainLanding extends React.Component {
     if (languages) currentLangs = languages.map((lang) => lang.languageName);
 
     return (
-      <ScrollView style={ styles.homeBackground }>
+      <SafeAreaView style={ styles.homeBackground }>
         <View>
           <Button
             title="Login"
@@ -93,10 +94,10 @@ class MainLanding extends React.Component {
             }
           </View>
         </View>
-        <View style={ styles.sectionContainer }>
+        <View style={ styles.sectionContainerTwo }>
           { // render language choice menu component
             languages
-              ? <View><Text>Render language menu</Text></View>
+              ? <LanguagePanel languages={ languages }/>
               : <Text>Server not responding</Text>
           }
           { // render translation choice component
@@ -114,7 +115,7 @@ class MainLanding extends React.Component {
             }
           </View>
         </View>
-      </ScrollView>
+      </SafeAreaView>
     );
   }
 }
