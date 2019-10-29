@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  ScrollView, View, Text, Picker,
+  ScrollView, View, Picker,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
