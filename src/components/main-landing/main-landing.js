@@ -52,16 +52,44 @@ class MainLanding extends React.Component {
     });
   }
 
+  handleChoice() {
+    const { 
+      languageSelection, 
+      languageSelectionCode, 
+      translationDirection,
+      languageSelectionTransliteration,
+      languageSelectionLocal,
+      spokenIn,
+      family,
+      totalSpeakers,
+    } = this.props.language;
+
+    console.log(this.props.language);
+
+    // if (languageSelection && translationDirection) {
+    //   return this.props.wordsFetch({ 
+    //     languageSelection, translationDirection, languageSelectionCode, languageSelectionLocal, languageSelectionTransliteration, spokenIn, family, totalSpeakers,
+    //   })
+    //     .then(() => {
+    //       this.props.history.push(routes.CARDS_ROUTE);
+    //     });
+    // }
+    // return this.props.setLanguage();
+  }
+
   render() {
     const { navigation } = this.props;
     const { 
-      languages, languageSelection, translationDirection, 
+      languages, languageSelection, 
     } = this.props.language;
     const { toggleMenu, authError } = this.state;
 
-    let formattedLangSelect;
+    let formattedLangSelection;
     let currentLangs;
     if (languages) currentLangs = languages.map((lang) => lang.languageName);
+    if (languageSelection) {
+      formattedLangSelection = `${languageSelection.charAt(0).toUpperCase()}${languageSelection.slice(1)}`;
+    }
 
     return (
       <SafeAreaView style={ styles.homeBackground }>
@@ -96,28 +124,17 @@ class MainLanding extends React.Component {
           </View>
         </View>
         <View style={ styles.sectionContainerTwo }>
-          { // render language choice menu component
-            languages
-              ? <LanguagePanel 
-                  languages={ languages }
-                  setLanguage={ this.props.setLanguage }
-                />
-              : <ActivityIndicator size="large"/>
-          }
-          { // render translation choice component
-            formattedLangSelect 
-              ? <View><Text>Render translation choice menu</Text></View>
-              : null
-          }
-          <View style={ styles.sectionContainer }>
-            { languageSelection && translationDirection 
-              ? <Button 
-                  title="Show Cards"
-                  onPress={ this.handleChoice }
-                />
-              : null
-            }
-          </View>
+        { // render language choice menu component
+          languages
+            ? <LanguagePanel 
+                languages={ languages }
+                setLanguage={ this.props.setLanguage }
+                setTransDir={ this.props.setTransDir }
+                showCards={ this.handleChoice }
+                formattedLangSelection={ formattedLangSelection }
+              /> 
+            : <ActivityIndicator size="large"/>
+        }
         </View>
       </SafeAreaView>
     );
@@ -129,6 +146,7 @@ MainLanding.propTypes = {
   language: PropTypes.object,
   languagesFetch: PropTypes.func,
   setLanguage: PropTypes.func,
+  setTransDir: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -142,7 +160,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   languagesFetch: () => dispatch(languageActions.languagesFetchRequest()),
   setLanguage: (lang) => dispatch(languageActions.languageSelect(lang)),
-  // setTransDir: dir => dispatch(languageActions.languageTransDirSet(dir)),
+  setTransDir: (dir) => dispatch(languageActions.languageTransDirSet(dir)),
   createLanguage: (lang) => dispatch(languageActions.languageCreateRequest(lang)),
   // wordsFetch: lang => dispatch(wordActions.wordsFetchRequest(lang)),
   // signup: user => dispatch(authActions.signupRequest(user)),

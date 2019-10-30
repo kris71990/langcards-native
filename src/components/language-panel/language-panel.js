@@ -1,22 +1,26 @@
 import React from 'react';
 import { 
-  TouchableOpacity, SafeAreaView,
+  TouchableOpacity, SafeAreaView, Modal, Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
 import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
+import TranslationChoice from '../translation-choice/translation-choice';
 import { LanguageChoicePanel } from '../language/language';
 import autoBind from '../../utils/autobind';
 
 import styles from './language-panel.style';
 
+const defaultState = {
+  languageSelection: '',
+  languageCode: null,
+  isModalOpen: false,
+};
+
 class LanguagePanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      languageSelection: '',
-      languageCode: null,
-    };
+    this.state = defaultState;
     autoBind.call(this, LanguagePanel);
   }
 
@@ -32,7 +36,13 @@ class LanguagePanel extends React.Component {
     return this.setState({
       languageSelection: item.languageName,
       languageCode: item.languageId,
+      isModalOpen: true,
     });
+  }
+
+  handleShowCards() {
+    this.props.showCards();
+    return this.setState(defaultState);
   }
 
   render() {
@@ -53,6 +63,36 @@ class LanguagePanel extends React.Component {
           }}
           keyExtractor={ (item) => item.languageId }
         />
+        { this.state.isModalOpen ?
+            <Modal
+              animationType="fade"
+              transparent={ false }
+              visible={ this.state.isModalOpen }
+              onRequestClose={() => {
+                return this.setState({ 
+                  isModalOpen: false,
+                  languageSelection: '',
+                  languageCode: null,
+                });
+              }}>
+              <TranslationChoice
+                formattedLangSelection={ this.props.formattedLangSelection }
+                setTransDir={ this.props.setTransDir }
+                showCards={ this.handleShowCards }
+              />
+              <Button
+                title="Close"
+                onPress={() => {
+                  return this.setState({ 
+                    isModalOpen: false,
+                    languageSelection: '',
+                    languageCode: null,
+                  });
+                }}
+              />
+            </Modal>
+          : null
+          }
       </SafeAreaView>
     );
   }
@@ -61,6 +101,9 @@ class LanguagePanel extends React.Component {
 LanguagePanel.propTypes = {
   languages: PropTypes.array,
   setLanguage: PropTypes.func,
+  setTransDir: PropTypes.func,
+  showCards: PropTypes.func,
+  formattedLangSelection: PropTypes.string,
 };
 
 export default LanguagePanel;

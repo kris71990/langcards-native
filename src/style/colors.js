@@ -1,6 +1,7 @@
 export const HEADER_BACKGROUND = '#0F447C'; // #295599
 export const HEADER_MENU = '#29C0E9';
 export const MID_GREY = '#727272';
+export const LIGHT_GREY = '#D4D4D4';
 export const BASE = '#CAE0EC';
 export const HEADER_BORDER_TOP = '#58D295';
 export const HEADER_UNDERLINE = '#408EA3';

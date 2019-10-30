@@ -14,7 +14,7 @@ export default StyleSheet.create({
     paddingHorizontal: 24,
   },
   sectionContainerTwo: {
-    flex: 1,
+    flex: 2,
   },
   headerTitle: {
     textAlign: 'center',
