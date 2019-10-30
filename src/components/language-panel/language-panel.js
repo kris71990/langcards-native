@@ -20,10 +20,24 @@ class LanguagePanel extends React.Component {
     autoBind.call(this, LanguagePanel);
   }
 
+  handleChange(item) {
+    this.props.setLanguage({ 
+      lang: item.languageName, 
+      id: item.languageId, 
+      transliteration: item.transliteration,
+      spokenIn: item.spokenIn,
+      family: item.family,
+      totalSpeakers: item.totalSpeakers,
+    });
+    return this.setState({
+      languageSelection: item.languageName,
+      languageCode: item.languageId,
+    });
+  }
+
   render() {
     let { languages } = this.props;
     languages = languages.sort((a, b) => b.wordCount - a.wordCount); 
-    // const { languageSelection } = this.state;
 
     return (
       <SafeAreaView style={ styles.panelContainer }>
@@ -32,7 +46,7 @@ class LanguagePanel extends React.Component {
           data={ languages }
           renderItem={({ item }) => { 
             return (
-              <TouchableOpacity onPress={ () => console.log('meh') }>
+              <TouchableOpacity onPress={ () => this.handleChange(item) }>
                 <LanguageChoicePanel data={ item }/>
               </TouchableOpacity>
             );

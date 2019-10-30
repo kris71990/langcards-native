@@ -98,7 +98,10 @@ class MainLanding extends React.Component {
         <View style={ styles.sectionContainerTwo }>
           { // render language choice menu component
             languages
-              ? <LanguagePanel languages={ languages }/>
+              ? <LanguagePanel 
+                  languages={ languages }
+                  setLanguage={ this.props.setLanguage }
+                />
               : <ActivityIndicator size="large"/>
           }
           { // render translation choice component
@@ -125,6 +128,7 @@ MainLanding.propTypes = {
   navigation: PropTypes.object,
   language: PropTypes.object,
   languagesFetch: PropTypes.func,
+  setLanguage: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -137,9 +141,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   languagesFetch: () => dispatch(languageActions.languagesFetchRequest()),
-  // setLanguage: lang => dispatch(languageActions.languageSelect(lang)),
+  setLanguage: (lang) => dispatch(languageActions.languageSelect(lang)),
   // setTransDir: dir => dispatch(languageActions.languageTransDirSet(dir)),
-  // createLanguage: lang => dispatch(languageActions.languageCreateRequest(lang)),
+  createLanguage: (lang) => dispatch(languageActions.languageCreateRequest(lang)),
   // wordsFetch: lang => dispatch(wordActions.wordsFetchRequest(lang)),
   // signup: user => dispatch(authActions.signupRequest(user)),
   // login: user => dispatch(authActions.loginRequest(user)),
