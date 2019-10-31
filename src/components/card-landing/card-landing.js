@@ -8,14 +8,15 @@ import * as wordActions from '../../actions/words';
 import * as indexOptions from '../../utils/card-randomizer';
 import autoBind from '../../utils/autobind';
 
-const getData = async () => {
+const getData = async (prop) => {
   try {
-    const value = await AsyncStorage.getItem('words');
+    const value = await AsyncStorage.getItem(prop);
     if (value !== null) {
-      // value previously stored
+      return value;
     }
+    return null;
   } catch (e) {
-    // error reading value
+    return null;
   }
 };
 
@@ -40,50 +41,66 @@ class CardLanding extends React.Component {
   }
 
   componentDidMount() {
-    let { words, language } = this.props;
+    let { words, languageProperties } = this.props;
+    // TODO 
+    // Render method receives props
+    // CDM method should check if data exists in async storage and set it if it doesn't
+
+    /* 
+    ... 
+      try {
+        await response from getItem from Async storage
+      } catch {
+        await setItem
+      }
+    */
+    if (!languageProperties.languageSelectionCode) {
+      languageProperties = this.handleSetData('languageProperties');
+    }
     if (!words.languageId) {
-      let words;
-      let language;
-      setData = async () => {
-        try {
-          words = await AsyncStorage.setItem('words');
-          language = await AsyncStorage.setItem('language');
-          console.log('Words retrieved'); // eslint-disable-line
-          const indexArr = indexOptions.createShuffledIndexArray(langData.words.length);
-          return this.setState({
-            cardTracker: indexArr,
-            cardNumber: indexArr[0],
-          });
-        } catch {
-          return this.props.wordsFetch({ 
-            languageSelection: langData.languageSelection, 
-            translationDirection: langData.translationDirection, 
-            languageSelectionCode: langData.languageSelectionCode, 
-            languageSelectionLocal: baseLangData.languageSelectionLocal,
-            languageSelectionTransliteration: baseLangData.languageSelectionTransliteration,
-            spokenIn: baseLangData.spokenIn,
-            family: baseLangData.family,
-            totalSpeakers: baseLangData.totalSpeakers,
-          })
-            .then(() => {
-              console.log('Words retrieved'); // eslint-disable-line
-              const indexArr = indexOptions.createShuffledIndexArray(langData.words.length);
-              return this.setState({
-                cardTracker: indexArr,
-                cardNumber: indexArr[0],
-              });
-            });
-        }
-      };
+      words = this.handleSetData('words');
     } 
     return null;
   }
 
+  handleSetData = async (prop) => {
+    const { languageProperties } = this.props;
+    if (prop === 'languageProperties') {
+      await AsyncStorage.setItem(prop, JSON.stringify(languageProperties));
+      return null;
+    }
+
+    return this.props.wordsFetch({ 
+      languageSelection: languageProperties.languageSelection, 
+      translationDirection: languageProperties.translationDirection, 
+      languageSelectionCode: languageProperties.languageSelectionCode, 
+      languageSelectionLocal: languageProperties.languageSelectionLocal,
+      languageSelectionTransliteration: languageProperties.languageSelectionTransliteration,
+      spokenIn: languageProperties.spokenIn,
+      family: languageProperties.family,
+      totalSpeakers: languageProperties.totalSpeakers,
+    })
+      .then(() => {
+        const { words } = this.props;
+        console.log('Words retrieved'); // eslint-disable-line
+        const indexArr = indexOptions.createShuffledIndexArray(words.words.length);
+        this.setState({
+          cardTracker: indexArr,
+          cardNumber: indexArr[0],
+        });
+        return words;
+      })
+      .then(async (words) => {
+        await AsyncStorage.setItem(prop, JSON.stringify(words));
+        return null;
+      });
+  };
+
   render() {
     let { words, languageProperties } = this.props;
     // const { score } = this.state;
-    if (!words.langId) words = JSON.parse(localStorage.getItem('words'));
-    if (!baseLangData.spokenIn) baseLangData = JSON.parse(localStorage.getItem('language'));
+    if (!words.langId) words = getData('words');
+    if (!languageProperties.totalSpeakers) languageProperties = getData('languageProperties');
 
     return (
       <View>
@@ -95,7 +112,7 @@ class CardLanding extends React.Component {
 
 CardLanding.propTypes = {
   words: PropTypes.object,
-  language: PropTypes.object,
+  languageProperties: PropTypes.object,
   wordsFetch: PropTypes.func,
 };
 
@@ -113,7 +130,7 @@ const mapStateToProps = (state) => {
       translationDirection: state.words.translationDirection,
       words: state.words.words,
     },
-    language: state.language,
+    languageProperties: state.language,
   };
 };
 
