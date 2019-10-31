@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -21,8 +13,10 @@ import LanguageMenu from '../language-menu/language-menu';
 import LanguagePanel from '../language-panel/language-panel';
 
 import * as languageActions from '../../actions/language';
-import autoBind from '../../utils/autobind';
+import * as wordActions from '../../actions/words';
 import { resetHomeStack } from '../../utils/home-stack-actions';
+
+import autoBind from '../../utils/autobind';
 
 import styles from './main-landing.style';
 
@@ -64,17 +58,12 @@ class MainLanding extends React.Component {
       totalSpeakers,
     } = this.props.language;
 
-    console.log(this.props.language);
-
-    // if (languageSelection && translationDirection) {
-    //   return this.props.wordsFetch({ 
-    //     languageSelection, translationDirection, languageSelectionCode, languageSelectionLocal, languageSelectionTransliteration, spokenIn, family, totalSpeakers,
-    //   })
-    //     .then(() => {
-    //       this.props.history.push(routes.CARDS_ROUTE);
-    //     });
-    // }
-    // return this.props.setLanguage();
+    if (languageSelection && translationDirection) {
+      return this.props.wordsFetch({ 
+        languageSelection, translationDirection, languageSelectionCode, languageSelectionLocal, languageSelectionTransliteration, spokenIn, family, totalSpeakers,
+      });
+    }
+    return this.props.setLanguage();
   }
 
   render() {
@@ -147,6 +136,7 @@ MainLanding.propTypes = {
   languagesFetch: PropTypes.func,
   setLanguage: PropTypes.func,
   setTransDir: PropTypes.func,
+  wordsFetch: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -162,7 +152,7 @@ const mapDispatchToProps = (dispatch) => ({
   setLanguage: (lang) => dispatch(languageActions.languageSelect(lang)),
   setTransDir: (dir) => dispatch(languageActions.languageTransDirSet(dir)),
   createLanguage: (lang) => dispatch(languageActions.languageCreateRequest(lang)),
-  // wordsFetch: lang => dispatch(wordActions.wordsFetchRequest(lang)),
+  wordsFetch: (lang) => dispatch(wordActions.wordsFetchRequest(lang)),
   // signup: user => dispatch(authActions.signupRequest(user)),
   // login: user => dispatch(authActions.loginRequest(user)),
   // createProfile: username => dispatch(profileActions.createProfileReq(username)),
