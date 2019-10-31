@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import * as colors from '../../style/colors';
+import * as colors from '../../../style/colors';
 
 export default StyleSheet.create({
   langPanelContainer: {

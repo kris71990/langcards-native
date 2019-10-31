@@ -8,7 +8,6 @@ const defaultState = {
 export default (state = defaultState, { type, payload }) => {
   switch (type) {
     case 'WORDS_SET':
-      console.log(payload);
       const { 
         languageSelection, languageSelectionCode, translationDirection, words, 
       } = payload;

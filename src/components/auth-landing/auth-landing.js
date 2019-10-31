@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
+import { goToMenu } from '../../utils/home-stack-actions';
 import headers from '../../style/headers';
 import styles from './auth-landing.style';
 
@@ -102,7 +103,7 @@ class AuthLanding extends React.Component {
           </View>
           <TouchableOpacity
             style={ styles.guestButton }
-            onPress={ () => navigation.navigate('Cards') }
+            onPress={ () => navigation.dispatch(goToMenu) }
           >
             <Text style={ styles.buttonText }>Continue as guest...</Text>
           </TouchableOpacity>

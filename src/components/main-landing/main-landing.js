@@ -14,7 +14,7 @@ import LanguagePanel from '../language-panel/language-panel';
 
 import * as languageActions from '../../actions/language';
 import * as wordActions from '../../actions/words';
-import { resetHomeStack } from '../../utils/home-stack-actions';
+import { resetHomeStack, goToCards } from '../../utils/home-stack-actions';
 
 import autoBind from '../../utils/autobind';
 
@@ -47,6 +47,7 @@ class MainLanding extends React.Component {
   }
 
   handleChoice() {
+    const { navigation } = this.props;
     const { 
       languageSelection, 
       languageSelectionCode, 
@@ -61,7 +62,8 @@ class MainLanding extends React.Component {
     if (languageSelection && translationDirection) {
       return this.props.wordsFetch({ 
         languageSelection, translationDirection, languageSelectionCode, languageSelectionLocal, languageSelectionTransliteration, spokenIn, family, totalSpeakers,
-      });
+      })
+        .then(() => navigation.dispatch(goToCards));
     }
     return this.props.setLanguage();
   }

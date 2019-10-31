@@ -4,9 +4,9 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
+import AnimatedFlatList from '../common/animated-flatlist/animated-flatlist';
 import TranslationChoice from '../translation-choice/translation-choice';
-import { LanguageChoicePanel } from '../language/language';
+import { LanguageChoicePanel } from '../common/language/language';
 import autoBind from '../../utils/autobind';
 
 import styles from './language-panel.style';

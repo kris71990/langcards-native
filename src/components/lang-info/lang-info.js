@@ -4,8 +4,8 @@ import {
   View, Text, SafeAreaView, TouchableOpacity, Button,
 } from 'react-native';
 
-import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
-import { LanguageChoiceInfo } from '../language/language';
+import AnimatedFlatList from '../common/animated-flatlist/animated-flatlist';
+import { LanguageChoiceInfo } from '../common/language/language';
 import { resetHomeStack } from '../../utils/home-stack-actions';
 
 import { supportedLanguages } from '../../utils/supported-langs';
