@@ -8,18 +8,6 @@ import * as wordActions from '../../actions/words';
 import * as indexOptions from '../../utils/card-randomizer';
 import autoBind from '../../utils/autobind';
 
-const getData = async (prop) => {
-  try {
-    const value = await AsyncStorage.getItem(prop);
-    if (value !== null) {
-      return value;
-    }
-    return null;
-  } catch (e) {
-    return null;
-  }
-};
-
 class CardLanding extends React.Component {
   constructor(props) {
     super(props);
@@ -40,33 +28,67 @@ class CardLanding extends React.Component {
     autoBind.call(this, CardLanding);
   }
 
-  componentDidMount() {
-    let { words, languageProperties } = this.props;
-    // TODO 
-    // Render method receives props
-    // CDM method should check if data exists in async storage and set it if it doesn't
+  async componentDidMount() {
+    const { words, languageProperties } = this.props;
 
-    /* 
-    ... 
-      try {
-        await response from getItem from Async storage
-      } catch {
-        await setItem
-      }
-    */
     if (!languageProperties.languageSelectionCode) {
-      languageProperties = this.handleSetData('languageProperties');
+      return this.handleSetDataFromAPI('languageProperties');
     }
     if (!words.languageId) {
-      words = this.handleSetData('words');
+      return this.handleSetDataFromAPI('words');
     } 
+
+    const wordsFromAS = await this.handleGetData('words');
+    const langPropsFromAS = await this.handleGetData('languageProperties');
+
+    if (langPropsFromAS === null) {
+      await this.handleSetDataFromProps('languageProperties');
+    }
+    if (wordsFromAS === null) {
+      await this.handleSetDataFromProps('words');
+    }
     return null;
   }
 
-  handleSetData = async (prop) => {
-    const { languageProperties } = this.props;
+  handleGetData = async (prop) => {
+    try {
+      const value = await AsyncStorage.getItem(prop);
+      return value;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  handleSetDataFromProps = async (prop) => {
+    const { languageProperties, words } = this.props;
     if (prop === 'languageProperties') {
       await AsyncStorage.setItem(prop, JSON.stringify(languageProperties));
+      return null;
+    }
+
+    try {
+      await AsyncStorage.setItem(prop, JSON.stringify(words));
+      return null;
+    } catch (e) {
+      return null;
+    } finally {
+      const indexArr = indexOptions.createShuffledIndexArray(words.words.length);
+      this.setState({
+        cardTracker: indexArr,
+        cardNumber: indexArr[0],
+      });
+    }
+  }
+
+  handleSetDataFromAPI = async (prop) => {
+    const { languageProperties } = this.props;
+    if (prop === 'languageProperties') {
+      try {
+        console.log('Language Properties retrieved'); // eslint-disable-line
+        await AsyncStorage.setItem(prop, JSON.stringify(languageProperties));
+      } catch {
+        return null;
+      }
       return null;
     }
 
@@ -91,16 +113,21 @@ class CardLanding extends React.Component {
         return words;
       })
       .then(async (words) => {
-        await AsyncStorage.setItem(prop, JSON.stringify(words));
-        return null;
+        try {
+          await AsyncStorage.setItem(prop, JSON.stringify(words));
+          return null;
+        } catch {
+          return null;
+        }
       });
   };
 
   render() {
     let { words, languageProperties } = this.props;
     // const { score } = this.state;
-    if (!words.langId) words = getData('words');
-    if (!languageProperties.totalSpeakers) languageProperties = getData('languageProperties');
+    // console.log(this.handleGetData('words'));
+    // if (!words.languageId) words = this.getData('words');
+    // if (!languageProperties.totalSpeakers) languageProperties = this.getData('languageProperties');
 
     return (
       <View>
