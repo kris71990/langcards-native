@@ -28,23 +28,32 @@ class CardLanding extends React.Component {
     autoBind.call(this, CardLanding);
   }
 
+  // when component mounts, check to see if data exists in props
+  // if it does, check if in async storage and conditionally set to async storage
+  // if it doesn't, check if in async storage
+  // if in async storage, return; if not, get data from server and set to async storage
   async componentDidMount() {
     const { words, languageProperties } = this.props;
-
-    if (!languageProperties.languageSelectionCode) {
-      return this.handleSetDataFromAPI('languageProperties');
+    
+    if (!words.languageId || !languageProperties.languageSelectionCode) {
+      if (!languageProperties.languageSelectionCode) {
+        const langPropsFromASIfNoProps = await this.handleGetData('languageProperties');
+        if (!langPropsFromASIfNoProps) this.handleSetDataFromAPI('languageProperties');
+      }
+      if (!words.languageId) {
+        const wordsFromASIfNoProps = await this.handleGetData('words');
+        if (!wordsFromASIfNoProps) this.handleSetDataFromAPI('words');
+      } 
+      return null;
     }
-    if (!words.languageId) {
-      return this.handleSetDataFromAPI('words');
-    } 
 
-    const wordsFromAS = await this.handleGetData('words');
-    const langPropsFromAS = await this.handleGetData('languageProperties');
+    const langPropsFromASIfProps = await this.handleGetData('languageProperties');
+    const wordsFromASIfProps = await this.handleGetData('words');
 
-    if (langPropsFromAS === null) {
+    if (!langPropsFromASIfProps) {
       await this.handleSetDataFromProps('languageProperties');
     }
-    if (wordsFromAS === null) {
+    if (!wordsFromASIfProps) {
       await this.handleSetDataFromProps('words');
     }
     return null;
