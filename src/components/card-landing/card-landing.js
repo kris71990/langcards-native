@@ -8,6 +8,15 @@ import * as wordActions from '../../actions/words';
 import * as indexOptions from '../../utils/card-randomizer';
 import autoBind from '../../utils/autobind';
 
+async function getData(prop) {
+  try {
+    const value = await AsyncStorage.getItem(prop);
+    return value;
+  } catch (e) {
+    return null;
+  }
+}
+
 class CardLanding extends React.Component {
   constructor(props) {
     super(props);
@@ -133,14 +142,40 @@ class CardLanding extends React.Component {
 
   render() {
     let { words, languageProperties } = this.props;
-    // const { score } = this.state;
-    // console.log(this.handleGetData('words'));
-    // if (!words.languageId) words = this.getData('words');
-    // if (!languageProperties.totalSpeakers) languageProperties = this.getData('languageProperties');
+    let { score } = this.state;
+
+    const { 
+      cardNumber, answer, hintType, hintCategory, hintTransliteration,
+    } = this.state;
+    let flashcardWords;
+    let totalWords;
+
+    if (words && words.words) {
+      flashcardWords = words.words;
+      totalWords = flashcardWords.length;
+    }
 
     return (
       <View>
-        <Text>CARD CONTAINER</Text>
+        {
+          flashcardWords && flashcardWords.length > 0
+            ? 
+            <View>
+              <Text>Your {words.language} flashcards ({ totalWords ? totalWords : '0'})</Text>
+              <View>
+                <Text>{ words.translationDirection }</Text>
+                <Text>{ `${score[0]}/${score[1]}` }</Text>
+              </View>
+              <View><Text>CARD JSX</Text></View>
+              <View><Text>Card Buttons</Text></View>
+            </View>
+            : 
+            <View>
+              <Text>There are currently no flashcards to study for { words.language }.</Text>
+              <Text>Add some words!</Text>
+              <Text>Add Button</Text>
+            </View>
+        }
       </View>
     );
   }
