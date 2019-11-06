@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import PropTypes from 'prop-types';
@@ -7,6 +7,20 @@ import PropTypes from 'prop-types';
 import * as wordActions from '../../actions/words';
 import * as indexOptions from '../../utils/card-randomizer';
 import autoBind from '../../utils/autobind';
+
+import styles from './card-landing.style';
+
+const CardItemTextBlock = ({ text }) => {
+  return <Text style={ styles.cardText }>{ text }</Text>;
+};
+
+const CardViewButton = ({ text, action }) => {
+  return <TouchableOpacity
+            style={ styles.cardButtons } 
+            onPress={ action }>
+            <Text>{ text }</Text>
+         </TouchableOpacity>;
+};
 
 async function getData(prop) {
   try {
@@ -141,8 +155,8 @@ class CardLanding extends React.Component {
   };
 
   render() {
-    let { words, languageProperties } = this.props;
-    let { score } = this.state;
+    const { words } = this.props;
+    const { score } = this.state;
 
     const { 
       cardNumber, answer, hintType, hintCategory, hintTransliteration,
@@ -155,8 +169,76 @@ class CardLanding extends React.Component {
       totalWords = flashcardWords.length;
     }
 
+    let cardJSX;
+    if (flashcardWords && flashcardWords.length > 0) {
+      switch (words.translationDirection) {
+        case 'native-english':
+          if (!answer) {
+            cardJSX = 
+              <View style={ styles.cardContent }>
+                <CardItemTextBlock text={ flashcardWords[cardNumber].wordLocal }/>
+              { hintType ? 
+                  <CardItemTextBlock 
+                    text={`(${flashcardWords[cardNumber].typeOfWord})`}
+                  /> 
+                : null 
+              }
+              { hintCategory ? 
+                  <CardItemTextBlock
+                    text={ `(${flashcardWords[cardNumber].category})` }
+                  /> 
+                : null 
+                }
+              { hintTransliteration ? 
+                  <CardItemTextBlock
+                    text={`(${flashcardWords[cardNumber].transliteration})`}
+                  /> 
+                : null 
+              }
+              </View>;
+          } else {
+            cardJSX = 
+              <View style={ styles.cardContent }>
+                <CardItemTextBlock text={ flashcardWords[cardNumber].wordEnglish }/>
+              </View>;
+          }
+          break;
+        case 'english-native':
+          if (!answer) {
+            cardJSX = 
+              <View style={ styles.cardContent }>
+                <CardItemTextBlock text={ flashcardWords[cardNumber].wordEnglish }/>
+              </View>;
+          } else {
+            cardJSX = 
+              <View style={ styles.cardContent }>
+                <CardItemTextBlock text={ flashcardWords[cardNumber].wordLocal }/>
+              { hintType ? 
+                <CardItemTextBlock 
+                  text={ `(${flashcardWords[cardNumber].typeOfWord})` }
+                /> 
+                : null 
+              }
+              { hintCategory ? 
+                <CardItemTextBlock 
+                  text={ `(${flashcardWords[cardNumber].category })`}
+                /> 
+                : null 
+              }
+              { hintTransliteration ? 
+                <CardItemTextBlock text={ `(${flashcardWords[cardNumber].transliteration})` }/> 
+                : null 
+              }
+              </View>;
+          }
+          break;
+        default: 
+          cardJSX = <View><Text>Card Error</Text></View>;
+      }
+    }
+
     return (
-      <View>
+      <View style={ styles.cardContainer }>
         {
           flashcardWords && flashcardWords.length > 0
             ? 
@@ -166,14 +248,30 @@ class CardLanding extends React.Component {
                 <Text>{ words.translationDirection }</Text>
                 <Text>{ `${score[0]}/${score[1]}` }</Text>
               </View>
-              <View><Text>CARD JSX</Text></View>
-              <View><Text>Card Buttons</Text></View>
+              { cardJSX }
+              <View style={ styles.buttonsContainer }>
+                <CardViewButton
+                  text="Edit"
+                  action={ () => null }
+                />
+                <CardViewButton
+                  text="Delete"
+                  action={ () => null }
+                />
+                <CardViewButton
+                  text="Add"
+                  action={ () => null }
+                />
+              </View>
             </View>
             : 
             <View>
               <Text>There are currently no flashcards to study for { words.language }.</Text>
               <Text>Add some words!</Text>
-              <Text>Add Button</Text>
+              <CardViewButton
+                  text="Add Words"
+                  action={ () => null }
+                />
             </View>
         }
       </View>

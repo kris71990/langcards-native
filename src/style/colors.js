@@ -11,6 +11,8 @@ export const LIST_LIGHT_BLUE = '#98E2F1';
 export const LIST_LIGHT_GREEN = '#98F5E0';
 export const LIST_BORDER = '#2A5068';
 export const GUEST_BUTTON = '#7894B8';
+export const CARD_BACKGROUND = '#CADEF9';
+export const CARD_BUTTONS_LIGHT = '#B7C8DE';
 
 // // base
 // $base-background: #CAE0EC;
