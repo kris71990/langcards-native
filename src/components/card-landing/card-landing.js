@@ -1,35 +1,29 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { 
+  View, Text, TouchableOpacity, 
+} from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+import CheckBox from '@react-native-community/checkbox';
 import PropTypes from 'prop-types';
 
+import { CardViewButton, CardItemTextBlock } from '../common/card/card';
+import scoreParser from '../../utils/score-parser';
+import cardViewFormatter from '../../utils/formatter';
 import * as wordActions from '../../actions/words';
 import * as indexOptions from '../../utils/card-randomizer';
 import autoBind from '../../utils/autobind';
 
 import styles from './card-landing.style';
 
-const CardItemTextBlock = ({ text }) => {
-  return <Text style={ styles.cardText }>{ text }</Text>;
-};
-
-const CardViewButton = ({ text, action }) => {
-  return <TouchableOpacity
-            style={ styles.cardButtons } 
-            onPress={ action }>
-            <Text>{ text }</Text>
-         </TouchableOpacity>;
-};
-
-async function getData(prop) {
-  try {
-    const value = await AsyncStorage.getItem(prop);
-    return value;
-  } catch (e) {
-    return null;
-  }
-}
+// async function getData(prop) {
+//   try {
+//     const value = await AsyncStorage.getItem(prop);
+//     return value;
+//   } catch (e) {
+//     return null;
+//   }
+// }
 
 class CardLanding extends React.Component {
   constructor(props) {
@@ -154,6 +148,109 @@ class CardLanding extends React.Component {
       });
   };
 
+  handleFormat(type) {
+    return cardViewFormatter({ 
+      type, 
+      language: this.props.words.language, 
+      direction: this.props.words.translationDirection,
+    });
+  }
+
+  handleRandomCard() {
+    const { 
+      score, cardTracker, isCorrect, 
+    } = this.state;
+    const { words } = this.props.words;
+    const updatedScore = [...score];
+    const indices = [...cardTracker];
+
+    let updatedIndices = indexOptions.updateIndexArray(indices);
+    if (updatedIndices.length === 0) {
+      updatedIndices = indexOptions.createShuffledIndexArray(words.length);
+    }
+    
+    if (isCorrect) {
+      updatedScore[0] += 1;
+      updatedScore[1] += 1;
+    } else {
+      updatedScore[1] += 1;
+    }
+
+    const updatedColor = scoreParser(updatedScore);
+
+    return this.setState({
+      cardTracker: updatedIndices,
+      cardNumber: updatedIndices[0],
+      isCorrect: false,
+      score: updatedScore,
+      answer: false,
+      hintCategory: false,
+      hintType: false,
+      hintTransliteration: false,
+      color: updatedColor,
+      editError: undefined,
+    });
+  }
+
+  handleFlipCard() {
+    const flip = !this.state.answer;
+    return this.setState({
+      answer: flip,
+    });
+  }
+
+  handleHideHint() {
+    return this.setState({
+      hintCategory: false,
+      hintType: false,
+      hintTransliteration: false,
+    });
+  }
+
+  handleHint() {
+    const { words } = this.props.words;
+    const { cardNumber } = this.state;
+    const rand = Math.floor(Math.random() * 100 + 1);
+
+    if (words[cardNumber].transliteration) {
+      switch (rand % 3) {
+        case 0:
+          return this.setState({
+            hintCategory: true,
+            hintType: false,
+            hintTransliteration: false,
+          });
+        case 1:
+          return this.setState({
+            hintType: true,
+            hintCategory: false,
+            hintTransliteration: false,
+          });
+        default:
+          return this.setState({
+            hintType: false,
+            hintCategory: false,
+            hintTransliteration: true,
+          });
+      }
+    }
+
+    switch (rand % 2) {
+      case 0:
+        return this.setState({
+          hintCategory: true,
+          hintType: false,
+          hintTransliteration: false,
+        });
+      default: 
+        return this.setState({
+          hintType: true,
+          hintCategory: false,
+          hintTransliteration: false,
+        });
+    }
+  }
+
   render() {
     const { words } = this.props;
     const { score } = this.state;
@@ -214,14 +311,14 @@ class CardLanding extends React.Component {
               <View style={ styles.cardContent }>
                 <CardItemTextBlock text={ flashcardWords[cardNumber].wordLocal }/>
               { hintType ? 
-                <CardItemTextBlock 
-                  text={ `(${flashcardWords[cardNumber].typeOfWord})` }
-                /> 
+                  <CardItemTextBlock 
+                    text={ `(${flashcardWords[cardNumber].typeOfWord})` }
+                  /> 
                 : null 
               }
               { hintCategory ? 
                 <CardItemTextBlock 
-                  text={ `(${flashcardWords[cardNumber].category })`}
+                  text={ `(${flashcardWords[cardNumber].category})`}
                 /> 
                 : null 
               }
@@ -243,12 +340,43 @@ class CardLanding extends React.Component {
           flashcardWords && flashcardWords.length > 0
             ? 
             <View>
-              <Text>Your {words.language} flashcards ({ totalWords ? totalWords : '0'})</Text>
-              <View>
-                <Text>{ words.translationDirection }</Text>
-                <Text>{ `${score[0]}/${score[1]}` }</Text>
+              <View style={ styles.headerContainer }>
+                <Text style={ styles.cardHeader}>Your { this.handleFormat('language-simple') } flashcards ({ totalWords ? totalWords : '0'})</Text>
+                <View style={ styles.cardSubheader }>
+                  <Text style={ styles.subheaderText }>{ this.handleFormat('trans') }</Text>
+                  <Text style={ [styles.subheaderText, styles[this.state.color]] }>{ `${score[0]}/${score[1]}` }</Text>
+                </View>
               </View>
-              { cardJSX }
+              <TouchableOpacity
+                onPress={ this.handleFlipCard }
+              >
+                { cardJSX }
+              </TouchableOpacity>
+              <View style={ styles.checkbox }>
+                <CheckBox
+                  value={ this.state.isCorrect }
+                  onValueChange={ () => this.setState({ isCorrect: !this.state.isCorrect })}
+                />
+                <Text>Correct?</Text>
+              </View>
+              <View style={ styles.buttonsContainer }>
+                {
+                  hintType || hintCategory || hintTransliteration ?
+                    <CardViewButton
+                      text="Hide Hint"
+                      action={ this.handleHideHint }
+                    />
+                    : 
+                    <CardViewButton
+                      text="Show Hint"
+                      action={ this.handleHint }
+                    />
+                }
+                <CardViewButton
+                  text="Next Card"
+                  action={ this.handleRandomCard }
+                />
+              </View>
               <View style={ styles.buttonsContainer }>
                 <CardViewButton
                   text="Edit"
