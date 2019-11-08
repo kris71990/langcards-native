@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 
 import LanguageMenu from '../language-menu/language-menu';
 import LanguagePanel from '../language-panel/language-panel';
+import LoginButton from '../common/loginButton';
 
 import * as languageActions from '../../actions/language';
 import * as wordActions from '../../actions/words';
@@ -85,9 +86,8 @@ class MainLanding extends React.Component {
     return (
       <SafeAreaView style={ styles.homeBackground }>
         <View>
-          <Button
-            title="Login"
-            onPress={ () => navigation.dispatch(resetHomeStack) }
+          <LoginButton
+            stackNav={ () => navigation.dispatch(resetHomeStack) }
           />
         </View>
         <View>

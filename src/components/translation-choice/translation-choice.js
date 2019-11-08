@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  TouchableOpacity, View, Text, Button, 
+  TouchableOpacity, View, Text,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -51,12 +51,14 @@ class TranslationChoice extends React.Component {
         <View style={ styles.sectionContainer }>
         { 
           formattedLangSelection && this.state.translationDirection 
-            ? <Button 
-                title="Show Cards"
+            ? <TouchableOpacity 
+                style={ styles.toCardsButton }
                 onPress={ () => {
                   this.props.showCards();
                 } }
-              />
+              >
+                <Text style={ [styles.buttonText, styles.toCardsButtonText] }>Show Cards</Text>
+              </TouchableOpacity>
             : null
         }
         </View>

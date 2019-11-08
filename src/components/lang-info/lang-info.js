@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { 
-  View, Text, SafeAreaView, TouchableOpacity, Button,
+  View, Text, SafeAreaView, TouchableOpacity,
 } from 'react-native';
 
+import LoginButton from '../common/loginButton';
 import AnimatedFlatList from '../common/animated-flatlist/animated-flatlist';
 import { LanguageChoiceInfo } from '../common/language/language';
 import { resetHomeStack } from '../../utils/home-stack-actions';
@@ -49,9 +50,8 @@ class LanguageInfo extends React.Component {
     return (
       <SafeAreaView style={ styles.listContainer }>
         <View>
-          <Button
-            title="Login"
-            onPress={ () => navigation.dispatch(resetHomeStack) }
+          <LoginButton
+            stackNav={ () => navigation.dispatch(resetHomeStack) }
           />
         </View>
         <Text style={ headers.title }>Languages</Text>

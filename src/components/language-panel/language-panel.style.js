@@ -10,4 +10,12 @@ export default StyleSheet.create({
     borderTopColor: HEADER_UNDERLINE,
     borderTopWidth: 10,
   },
+  backButton: {
+    padding: 10,
+    backgroundColor: '#ff5c5c',
+  },
+  backButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });

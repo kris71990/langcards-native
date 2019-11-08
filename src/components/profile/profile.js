@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 
+import LoginButton from '../common/loginButton';
 import { goToMenu } from '../../utils/home-stack-actions';
 
 import styles from './profile.style';
@@ -42,9 +43,8 @@ class Profile extends React.Component {
     return (
       <View style={ styles.profileContainer }>
         <View>
-          <Button
-            title="Login"
-            onPress={ () => navigation.dispatch(goToMenu) }
+          <LoginButton
+            stackNav={ () => navigation.dispatch(goToMenu) }
           />
         </View>
         <View><Text style={ headers.title }>Welcome, NAME</Text></View>

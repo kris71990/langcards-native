@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  TouchableOpacity, SafeAreaView, Modal, Button,
+  TouchableOpacity, SafeAreaView, Modal, Text,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -75,13 +75,8 @@ class LanguagePanel extends React.Component {
                   languageCode: null,
                 });
               }}>
-              <TranslationChoice
-                formattedLangSelection={ this.props.formattedLangSelection }
-                setTransDir={ this.props.setTransDir }
-                showCards={ this.handleShowCards }
-              />
-              <Button
-                title="Close"
+              <TouchableOpacity
+                style={ styles.backButton }
                 onPress={() => {
                   return this.setState({ 
                     isModalOpen: false,
@@ -89,6 +84,13 @@ class LanguagePanel extends React.Component {
                     languageCode: null,
                   });
                 }}
+              >
+                <Text style={ styles.backButtonText }>{ '<-- Back' }</Text>
+              </TouchableOpacity>
+              <TranslationChoice
+                formattedLangSelection={ this.props.formattedLangSelection }
+                setTransDir={ this.props.setTransDir }
+                showCards={ this.handleShowCards }
               />
             </Modal>
           : null
