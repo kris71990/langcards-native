@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { GUEST_BUTTON, LIGHT_GREY, LIST_BORDER } from '../../style/colors';
+import { LIGHT_GREY } from '../../style/colors';
 
 export default StyleSheet.create({
   translationChoiceContainer: {
@@ -11,32 +11,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginBottom: 100,
   },
-  dirButton: {
-    margin: 20,
-    paddingLeft: 50,
-    paddingRight: 50,
-    paddingTop: 20,
-    paddingBottom: 20,
-    backgroundColor: GUEST_BUTTON,
-  },
-  toCardsButton: {
-    textAlign: 'center',
-    padding: 20,
-    backgroundColor: LIST_BORDER,
-  },
-  toCardsButtonText: {
-    textAlign: 'center',
-    color: 'white',
-    fontWeight: 'bold',
-  },
   title: {
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 100,
-    marginBottom: 100,
-  },
-  buttonText: {
-    fontSize: 20,
+    marginBottom: 50,
   },
 });

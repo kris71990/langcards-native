@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
 
-import LoginButton from '../common/loginButton';
-import { goToMenu } from '../../utils/home-stack-actions';
+import TouchableButton from '../common/buttons/touchableButton';
+import { resetHomeStack } from '../../utils/home-stack-actions';
 
 import styles from './profile.style';
 import headers from '../../style/headers';
@@ -38,20 +39,30 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, profile } = this.props;
 
     return (
-      <View style={ styles.profileContainer }>
-        <View>
-          <LoginButton
-            stackNav={ () => navigation.dispatch(goToMenu) }
-          />
-        </View>
-        <View><Text style={ headers.title }>Welcome, NAME</Text></View>
-        <View style={ styles.profileViewContainer }>
-          <Text>Account Age: ACCOUNT_AGE</Text>
-          <Table/>
-        </View>
+      <View style={ styles.profileScreen }>
+        {
+          profile ? 
+            <View style={ styles.profileViewContainer }>
+              <View><Text style={ headers.title }>Welcome, NAME</Text></View>
+              <View style={ styles.profileViewContainer }>
+                <Text>Account Age: ACCOUNT_AGE</Text>
+                <Table/> 
+              </View>
+            </View>
+            : 
+            <View>
+              <View style={ styles.guestProfileContainer }>
+                <Text style={ styles.guestProfileText }>Login or Signup to view your profile</Text> 
+              </View>
+              <TouchableButton
+                stackNav={ () => navigation.dispatch(resetHomeStack) }
+                text="Login"
+              />
+            </View>
+        }
       </View>
     );
   }
@@ -59,6 +70,20 @@ class Profile extends React.Component {
 
 Profile.propTypes = {
   navigation: PropTypes.object,
+  // fetchProfile: PropTypes.func,
+  // updateProfile: PropTypes.func,
+  profile: PropTypes.object,
 };
 
-export default Profile;
+// const mapDispatchToProps = (dispatch) => ({
+//   // fetchProfile: () => dispatch(profileActions.fetchProfileReq()),
+//   // updateProfile: (profile, lang) => dispatch(profileActions.updateProfileReq(profile, lang)),
+// });
+
+const mapStateToProps = (state) => {
+  return {
+    profile: state.profile,
+  };
+};
+
+export default connect(mapStateToProps, null)(Profile);

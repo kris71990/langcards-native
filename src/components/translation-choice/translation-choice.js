@@ -1,8 +1,8 @@
 import React from 'react';
-import { 
-  TouchableOpacity, View, Text,
-} from 'react-native';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
+
+import TouchableButton from '../common/buttons/touchableButton';
 
 import autoBind from '../../utils/autobind';
 
@@ -31,34 +31,24 @@ class TranslationChoice extends React.Component {
       <View style={ styles.translationChoiceContainer }>
         <Text style={ styles.title }>Select Translation Direction</Text>
         <View style={ styles.translationChoiceButtons }>
-          <TouchableOpacity
-            style={ styles.dirButton }
-            onPress={ () => this.handleChange('native-english') }
-          >
-            <Text style={ styles.buttonText }>
-              { formattedLangSelection } - English
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={ styles.dirButton }
-            onPress={ () => this.handleChange('english-native') }
-          >
-            <Text style={ styles.buttonText }>
-              English - { formattedLangSelection }
-            </Text>
-          </TouchableOpacity>
+          <TouchableButton
+            text={ `${formattedLangSelection} - English` }
+            stackNav={ () => this.handleChange('native-english') }
+          />
+          <TouchableButton
+            text={ `English - ${formattedLangSelection}` }
+            stackNav={ () => this.handleChange('english-native') }
+          />
         </View>
         <View style={ styles.sectionContainer }>
         { 
           formattedLangSelection && this.state.translationDirection 
-            ? <TouchableOpacity 
-                style={ styles.toCardsButton }
-                onPress={ () => {
+            ? <TouchableButton
+                text="Show Cards"
+                stackNav={ () => {
                   this.props.showCards();
                 } }
-              >
-                <Text style={ [styles.buttonText, styles.toCardsButtonText] }>Show Cards</Text>
-              </TouchableOpacity>
+              />
             : null
         }
         </View>

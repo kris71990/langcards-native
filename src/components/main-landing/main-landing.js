@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 
 import LanguageMenu from '../language-menu/language-menu';
 import LanguagePanel from '../language-panel/language-panel';
-import LoginButton from '../common/loginButton';
+import LoginButton from '../common/buttons/loginButton';
 
 import * as languageActions from '../../actions/language';
 import * as wordActions from '../../actions/words';

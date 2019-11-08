@@ -4,7 +4,7 @@ import {
   View, Text, SafeAreaView, TouchableOpacity,
 } from 'react-native';
 
-import LoginButton from '../common/loginButton';
+import LoginButton from '../common/buttons/loginButton';
 import AnimatedFlatList from '../common/animated-flatlist/animated-flatlist';
 import { LanguageChoiceInfo } from '../common/language/language';
 import { resetHomeStack } from '../../utils/home-stack-actions';
