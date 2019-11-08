@@ -1,13 +1,15 @@
 import React from 'react';
 import { 
-  View, Text, TouchableOpacity, 
+  View, Text, TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import CheckBox from '@react-native-community/checkbox';
 import PropTypes from 'prop-types';
 
+import TouchableButton from '../common/buttons/touchableButton';
 import { CardViewButton, CardItemTextBlock } from '../common/card/card';
+import { resetHomeStack } from '../../utils/home-stack-actions';
 import scoreParser from '../../utils/score-parser';
 import cardViewFormatter from '../../utils/formatter';
 import * as wordActions from '../../actions/words';
@@ -252,7 +254,7 @@ class CardLanding extends React.Component {
   }
 
   render() {
-    const { words } = this.props;
+    const { words, navigation } = this.props;
     const { score } = this.state;
 
     const { 
@@ -336,6 +338,16 @@ class CardLanding extends React.Component {
 
     return (
       <View style={ styles.cardContainer }>
+        <View style={ styles.appNavButtons }>
+          <TouchableButton
+            text="Back to Languages"
+            stackNav={ () => navigation.navigate('Main') }
+          />
+          <TouchableButton 
+            text="Login"
+            stackNav={ () => navigation.dispatch(resetHomeStack) }
+          />
+        </View>
         {
           flashcardWords && flashcardWords.length > 0
             ? 
@@ -408,6 +420,7 @@ class CardLanding extends React.Component {
 }
 
 CardLanding.propTypes = {
+  navigation: PropTypes.object,
   words: PropTypes.object,
   languageProperties: PropTypes.object,
   wordsFetch: PropTypes.func,

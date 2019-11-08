@@ -5,6 +5,10 @@ import {
 } from '../../style/colors';
 
 export default StyleSheet.create({
+  appNavButtons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   cardContainer: {
     flex: 1,
     alignSelf: 'stretch',
@@ -28,7 +32,7 @@ export default StyleSheet.create({
   },
   cardContent: {
     justifyContent: 'center',
-    height: 300,
+    height: 250,
     borderWidth: 3,
     marginBottom: 20,
     marginTop: 10,

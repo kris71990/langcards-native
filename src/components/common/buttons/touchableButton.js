@@ -13,6 +13,16 @@ const TouchableButton = ({ stackNav, text }) => {
       textStyle = 'toCardsButtonText';
       break;
     }
+    case 'Back to Languages': {
+      touchableStyle = 'backButton';
+      textStyle = 'navButtonText';
+      break;
+    }
+    case 'Login': {
+      touchableStyle = 'loginButton';
+      textStyle = 'navButtonText';
+      break;
+    }
     default: {
       touchableStyle = 'dirButton';
       textStyle = 'dirButtonText';
@@ -58,6 +68,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 20,
+  },
+  backButton: {
+    marginRight: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+    backgroundColor: '#ff5c5c',
+  },
+  loginButton: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+    backgroundColor: '#ff5c5c',
+  },
+  navButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 
