@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { 
-  HEADER_UNDERLINE, GUEST_BUTTON, BASE, MID_GREY, 
+  HEADER_UNDERLINE, GUEST_BUTTON, BASE, MID_GREY, ERROR_RED,
 } from '../../style/colors';
 
 export default StyleSheet.create({
@@ -53,5 +53,16 @@ export default StyleSheet.create({
     padding: 10,
     margin: 50,
     marginTop: 40,
+  },
+
+  errorMessageContainer: {
+    marginLeft: 20,
+    marginTop: 20,
+  },
+
+  errorMessage: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: ERROR_RED,
   },
 });

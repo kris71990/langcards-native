@@ -1,40 +1,54 @@
-// import { fetch } from 'react-native';
-// import * as routes from '../utils/routes';
+// /* eslint no-undef: 0 */
+/* eslint no-console: 0 */
+import { Buffer } from 'buffer';
 
+import { API_URL } from 'react-native-dotenv';
 
-// export const setToken = token => ({
-//   type: 'TOKEN_SET',
-//   payload: token,
-// });
+const setToken = (token) => ({
+  type: 'TOKEN_SET',
+  payload: token,
+});
 
-// export const removeToken = () => ({
-//   type: 'TOKEN_REMOVE',
-// });
+const removeToken = () => ({
+  type: 'TOKEN_REMOVE',
+});
 
-// export const logout = () => {
-//   deleteCookie('lang-cards');
-//   return removeToken();
-// };
+const logout = () => {
+  return removeToken();
+};
 
-// export const signupRequest = (user) => (store) => {
-//   return fetch(`${API_URL}${routes.SIGNUP_ROUTE}`, {
-//     method: 'POST',
-//     body: user,
-//   })
-//     .then((response) => {
-//       return store.dispatch(setToken(response.body.token));
-//     });
-// };
+const signupRequest = (user) => (store) => {
+  return fetch(`${API_URL}/signup`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json', // eslint-disable-line
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  })
+    .then((response) => response.json())
+    .then((responseJSON) => {
+      console.log(responseJSON);
+      return store.dispatch(setToken(responseJSON.token));
+    });
+};
 
-// export const loginRequest = (user) => (store) => {
-//   return fetch(`${API_URL}${routes.LOGIN_ROUTE}`, {
-//     method: 'GET',
-//     body: JSON.stringify({
-//       user: user.username,
-//       password: user.password,
-//     }),
-//   })
-//     .then((response) => {
-//       return store.dispatch(setToken(response.body.token));
-//     });
-// };
+const loginRequest = (user) => (store) => {
+  const usernameUriComponent = encodeURIComponent(user.username);
+  const passwordUriComponent = encodeURIComponent(user.password);
+  return fetch(`${API_URL}/login?username=${usernameUriComponent}?password=${passwordUriComponent}`, {
+    method: 'GET',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'text/json',
+      'Authorization': `Basic ${Buffer.from(`${user.username}:${user.password}`).toString('base64')}`, // eslint-disable-line
+    },
+  })
+    .then((response) => response.json())
+    .then((responseJSON) => {
+      return store.dispatch(setToken(responseJSON.token));
+    });
+};
+
+export { loginRequest, signupRequest, logout };

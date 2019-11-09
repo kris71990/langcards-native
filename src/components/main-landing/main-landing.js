@@ -85,11 +85,15 @@ class MainLanding extends React.Component {
 
     return (
       <SafeAreaView style={ styles.homeBackground }>
-        <View>
-          <LoginButton
-            stackNav={ () => navigation.dispatch(resetHomeStack) }
-          />
-        </View>
+        {
+          !this.props.token ?
+            <View>
+              <LoginButton
+                stackNav={ () => navigation.dispatch(resetHomeStack) }
+              />
+            </View>
+            : null
+        }
         <View>
           <View style={ styles.sectionContainer }>
             <Text style={ styles.headerTitle }>Choose a Language</Text>
@@ -134,6 +138,7 @@ class MainLanding extends React.Component {
 
 MainLanding.propTypes = {
   navigation: PropTypes.object,
+  token: PropTypes.string,
   language: PropTypes.object,
   languagesFetch: PropTypes.func,
   setLanguage: PropTypes.func,
@@ -144,7 +149,7 @@ MainLanding.propTypes = {
 const mapStateToProps = (state) => {
   return {
     language: state.language,
-    // token: state.auth,
+    token: state.auth,
     // profile: state.profile,
   };
 };

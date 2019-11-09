@@ -13,6 +13,7 @@ export const LIST_BORDER = '#2A5068';
 export const GUEST_BUTTON = '#7894B8';
 export const CARD_BACKGROUND = '#CADEF9';
 export const CARD_BUTTONS_LIGHT = '#B7C8DE';
+export const ERROR_RED = '#F15353';
 
 // // base
 // $base-background: #CAE0EC;
