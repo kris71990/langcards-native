@@ -8,3 +8,8 @@
 ## Overview
 
 This is a mobile application version of the [Polyglot Corner](https://github.com/kris71990/lang-flashcards.git) web app. It is built with **React Native**.
+
+
+## Architecture
+
+The app is structured with two main component stacks

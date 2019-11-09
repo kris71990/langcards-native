@@ -4,17 +4,19 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import Home from '../home/home';
+import MainLanding from '../main-landing/main-landing';
+import AuthLanding from '../auth-landing/auth-landing';
+import CardLanding from '../card-landing/card-landing';
 import Profile from '../profile/profile';
 import LanguageInfo from '../lang-info/lang-info';
-import AuthLanding from '../auth-landing/auth-landing';
 
 import * as colors from '../../style/colors';
 
 const HomeStack = createStackNavigator(
   {
     Root: { screen: AuthLanding },
-    Cards: { screen: Home },
+    Main: { screen: MainLanding },
+    Cards: { screen: CardLanding },
   },
   {
     initialRouteName: 'Root',
@@ -25,7 +27,6 @@ const HomeStack = createStackNavigator(
 const TabNavigator = createBottomTabNavigator(
   {
     Home: { screen: HomeStack },
-    // Cards: { screen: Home },
     Info: { screen: LanguageInfo },
     Profile: { screen: Profile },
   },

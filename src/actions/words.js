@@ -1,4 +1,7 @@
-import fetch from 'react-native';
+/* eslint no-undef: 0 */
+/* eslint no-console: 0 */
+
+import { API_URL } from 'react-native-dotenv';
 
 const wordsFetch = (words) => ({
   type: 'WORDS_SET',
@@ -29,13 +32,14 @@ const wordsFetchRequest = (langData) => (store) => {
   const { 
     languageSelection, languageSelectionCode, translationDirection, languageSelectionLocal, languageSelectionTransliteration, spokenIn, family, totalSpeakers,
   } = langData;
-  return fetch(`${API_URL}/words/${languageSelectionCode}`, {
+  const languageUriComponent = encodeURIComponent(languageSelection);
+  return fetch(`${API_URL}/words/${languageSelectionCode}?languageSelection=${languageUriComponent}`, {
     method: 'GET',
-    body: langData,
   })
-    .then((response) => {
+    .then((response) => response.json())
+    .then((resJson) => {
       return store.dispatch(wordsFetch({
-        words: response.body,
+        words: resJson,
         languageSelection,
         languageSelectionCode,
         translationDirection,
@@ -45,6 +49,9 @@ const wordsFetchRequest = (langData) => (store) => {
         family,
         totalSpeakers,
       }));
+    })
+    .catch((error) => {
+      console.log(error);
     });
 };
 

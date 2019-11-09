@@ -1,4 +1,7 @@
-import { fetch } from 'react-native';
+/* eslint no-undef: 0 */
+/* eslint no-console: 0 */
+
+import { API_URL } from 'react-native-dotenv';
 
 const languageSelect = (language) => ({
   type: 'LANGUAGE_SELECT',
@@ -21,11 +24,13 @@ const languageAdd = (language) => ({
 });
 
 const languagesFetchRequest = () => (store) => {
-  return fetch(`${API_URL}/languages/all`, {
-    method: 'GET',
-  })
-    .then((response) => {
-      return store.dispatch(languagesFetch(response.body));
+  return fetch(`${API_URL}/languages/all`)
+    .then((response) => response.json())
+    .then((resJson) => {
+      return store.dispatch(languagesFetch(resJson));
+    })
+    .catch((error) => {
+      console.log(error);
     });
 };
 

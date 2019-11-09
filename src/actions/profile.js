@@ -1,4 +1,7 @@
-import { fetch } from 'react-native';
+/* eslint no-undef: 0 */
+/* eslint no-console: 0 */
+
+import { API_URL } from 'react-native-dotenv';
 
 const setProfile = (profile) => ({
   type: 'PROFILE_SET',
@@ -10,12 +13,18 @@ const createProfileReq = (username) => (store) => {
 
   return fetch(`${API_URL}/profile`, {
     method: 'POST',
-    // ...
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json', // eslint-disable-line
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`, // eslint-disable-line
+    },
+    body: JSON.stringify(username),
   })
-    .set('Authorization', `Bearer ${token}`)
-    .send(username)
-    .then((res) => {
-      return store.dispatch(setProfile(res.body));
+    .then((response) => response.json())
+    .then((resJSON) => {
+      return store.dispatch(setProfile(resJSON));
     });
 };
 
@@ -43,11 +52,17 @@ const fetchProfileReq = () => (store) => {
 
   return fetch(`${API_URL}/profile/me`, {
     method: 'GET',
-    // ...
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json', // eslint-disable-line
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`, // eslint-disable-line
+    },
   })
-    .set('Authorization', `Bearer ${token}`)
-    .then((res) => {
-      return store.dispatch(setProfile(res.body));
+    .then((response) => response.json())
+    .then((resJSON) => {
+      return store.dispatch(setProfile(resJSON));
     });
 };
 

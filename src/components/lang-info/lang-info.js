@@ -1,49 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { 
-  View, Text, SafeAreaView, TouchableOpacity, Button,
+  View, Text, SafeAreaView, TouchableOpacity,
 } from 'react-native';
 
-import AnimatedFlatList from '../animated-flatlist/animated-flatlist';
+import LoginButton from '../common/buttons/loginButton';
+import AnimatedFlatList from '../common/animated-flatlist/animated-flatlist';
+import { LanguageChoiceInfo } from '../common/language/language';
 import { resetHomeStack } from '../../utils/home-stack-actions';
 
 import { supportedLanguages } from '../../utils/supported-langs';
 import styles from './lang-info.style';
 import headers from '../../style/headers';
-
-const InfoItemTextBlock = ({ text }) => {
-  return <Text style={ styles.infoTextBlock }>{ text }</Text>;
-};
-
-const InfoItemTitle = ({ text }) => {
-  return <Text style={ styles.infoTextTitle }>{ text }</Text>;
-};
-
-const Language = ({ data, state }) => {
-  const { showMoreInfoIndex } = state;
-  const languageKey = parseInt(data.key, 10);
-  return (
-    <View style={ styles.langContainer }>
-      <Text 
-        style={ showMoreInfoIndex === languageKey ? styles.selectedLanguage : styles.unselectedLanguage }>{ data.name }
-      </Text>
-      {
-        showMoreInfoIndex === languageKey ?
-          <View style={ styles.moreInfoContainer }>
-            <InfoItemTitle text="Locally known as ..."/>
-            <InfoItemTextBlock text={ data.localName ? data.localName : data.name }/>
-            <InfoItemTitle text="Spoken by ..."/>
-            <InfoItemTextBlock text={ `${data.totalSpeakers} people` }/>
-            <InfoItemTitle text="Spoken in ..."/>
-            <InfoItemTextBlock text={ data.spokenIn.join(', ') }/>
-            <InfoItemTitle text="Family tree ..."/>
-            <InfoItemTextBlock text={ data.family.join(' --> ') }/>
-          </View>
-          : null
-      }
-    </View>
-  );
-};
 
 class LanguageInfo extends React.Component {
   constructor(props) {
@@ -82,9 +50,8 @@ class LanguageInfo extends React.Component {
     return (
       <SafeAreaView style={ styles.listContainer }>
         <View>
-          <Button
-            title="Login"
-            onPress={ () => navigation.dispatch(resetHomeStack) }
+          <LoginButton
+            stackNav={ () => navigation.dispatch(resetHomeStack) }
           />
         </View>
         <Text style={ headers.title }>Languages</Text>
@@ -94,7 +61,7 @@ class LanguageInfo extends React.Component {
           renderItem={({ item, index }) => { 
             return (
               <TouchableOpacity onPress={ () => this.toggleInfo(index) }>
-                <Language data={ item } state={ this.state }/>
+                <LanguageChoiceInfo data={ item } state={ this.state }/>
               </TouchableOpacity>
             );
           }}
@@ -107,19 +74,6 @@ class LanguageInfo extends React.Component {
 
 LanguageInfo.propTypes = {
   navigation: PropTypes.object,
-};
-
-Language.propTypes = {
-  data: PropTypes.object,
-  state: PropTypes.object,
-};
-
-InfoItemTitle.propTypes = {
-  text: PropTypes.string,
-};
-
-InfoItemTextBlock.propTypes = {
-  text: PropTypes.string,
 };
 
 export default LanguageInfo;
