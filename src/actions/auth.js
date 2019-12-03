@@ -28,7 +28,6 @@ const signupRequest = (user) => (store) => {
   })
     .then((response) => response.json())
     .then((responseJSON) => {
-      console.log(responseJSON);
       return store.dispatch(setToken(responseJSON.token));
     });
 };

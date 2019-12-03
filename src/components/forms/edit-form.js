@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
+import TouchableButton from '../common/buttons/touchableButton';
 import formatter from '../../utils/formatter';
 import styles from './edit-form.style';
 import autoBind from '../../utils/autobind';
@@ -19,9 +20,27 @@ class EditForm extends React.Component {
       typeOfWord: word.typeOfWord,
       categoryOfWord: word.category,
       wordDirty: false,
-      wordError: 'Error',
+      wordError: undefined,
     };
     autoBind.call(this, EditForm);
+  }
+
+  handleValidation() {
+    const { wordEnglish, wordLocal, transliteration } = this.state;
+
+    if (!wordEnglish || !wordLocal || (this.props.baseLang.languageSelectionTransliteration && !transliteration)) {
+      this.setState({
+        wordDirty: true,
+        wordError: 'Error',
+      });
+      return false;
+    }
+
+    this.setState({
+      wordDirty: false,
+      wordError: undefined,
+    });
+    return true;
   }
 
   handleChangeWordEnglish(wordEnglish) {
@@ -42,6 +61,14 @@ class EditForm extends React.Component {
     });
   }
 
+  handleSubmit() {
+    if (this.handleValidation()) {
+      return this.props.onComplete({ ...this.state, wordId: this.props.word.wordId });
+    } 
+  
+    return null;
+  }
+
   render() {
     const { languageSelectionTransliteration, languageSelection } = this.props.baseLang;
     const formattedLanguage = formatter({ 
@@ -52,8 +79,8 @@ class EditForm extends React.Component {
       <ScrollView style={ styles.homeBackground }>
         <View>
           <Text style={ styles.title }>Edit Word</Text>
-          <View style={ styles.authContainer }>
-            <Text>English</Text>
+          <View style={ styles.formContainer }>
+            <Text style={ styles.label }>English</Text>
             <TextInput
               style={ styles.textInput }
               placeholder="ex. boy"
@@ -63,7 +90,7 @@ class EditForm extends React.Component {
               value={ this.state.wordEnglish }
               onChangeText={ this.handleChangeWordEnglish }
             />
-            <Text>{ formattedLanguage }</Text>
+            <Text style={ styles.label }>{ formattedLanguage }</Text>
             <TextInput
               style={ styles.textInput }
               placeholder="ex. garcon"
@@ -75,7 +102,10 @@ class EditForm extends React.Component {
             />
             {
               languageSelectionTransliteration 
-                ? <TextInput
+                ? 
+                <View>
+                  <Text style={ styles.label }>Transliteration</Text>
+                  <TextInput
                     style={ styles.textInput }
                     placeholder="ni hao"
                     placeholderTextColor="white"
@@ -84,8 +114,15 @@ class EditForm extends React.Component {
                     value={ this.state.transliteration }
                     onChangeText={ this.handleChangeTransliteration }
                   />
+                </View>
                 : null
             }
+          </View>
+          <View>
+            <TouchableButton
+              text="Submit"
+              stackNav={ this.handleSubmit }
+            />
           </View>
         </View>
       </ScrollView>
@@ -99,6 +136,5 @@ EditForm.propTypes = {
   baseLang: PropTypes.object,
   onComplete: PropTypes.func,
 };
-
 
 export default EditForm;

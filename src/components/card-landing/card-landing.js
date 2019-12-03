@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  View, Text, TouchableOpacity, Modal,
+  View, Text, TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -8,7 +8,7 @@ import CheckBox from '@react-native-community/checkbox';
 import PropTypes from 'prop-types';
 
 import TouchableButton from '../common/buttons/touchableButton';
-import EditForm from '../forms/edit-form';
+import EditFormModal from '../modals/edit-modal';
 import { CardViewButton, CardItemTextBlock } from '../common/card/card';
 import { resetHomeStack } from '../../utils/home-stack-actions';
 import scoreParser from '../../utils/score-parser';
@@ -264,7 +264,7 @@ class CardLanding extends React.Component {
   handleUpdateWord(word) {
     return this.props.wordUpdate(word)
       .then(() => {
-        return this.setState({
+        this.setState({
           editing: false,
           actionError: undefined,
         });
@@ -355,35 +355,15 @@ class CardLanding extends React.Component {
       }
     }
 
-    if (editing) {
+    if (editing && token) {
       editJSX = 
-        <Modal
-          animationType="fade"
-          transparent={ false }
-          visible={ this.state.editing }
-          onRequestClose={() => {
-            return this.setState({ 
-              editing: false,
-            });
-          }}
-        >
-          <TouchableOpacity
-            style={ styles.backButton }
-            onPress={() => {
-              return this.setState({ 
-                editing: false,
-              });
-            }}
-          >
-            <Text style={ styles.backButtonText }>{ '<-- Back' }</Text>
-          </TouchableOpacity>
-          <EditForm
-            word={ flashcardWords[this.state.cardNumber] }
-            lang={ this.props.words }
-            baseLang={ this.props.languageProperties }
-            onComplete={ this.handleUpdateWord }
-          />
-        </Modal>;
+        <EditFormModal
+          close={ () => this.setState({ editing: false, actionError: undefined })}
+          word={ flashcardWords[this.state.cardNumber] }
+          lang={ this.props.words }
+          baseLang={ this.props.languageProperties }
+          onComplete={ this.handleUpdateWord }
+        />;
     } else {
       editJSX = null;
     }
@@ -400,7 +380,7 @@ class CardLanding extends React.Component {
             stackNav={ () => navigation.dispatch(resetHomeStack) }
           />
         </View>
-        { token ? editJSX : null }
+        { editJSX }
         {
           flashcardWords && flashcardWords.length > 0
             ? 

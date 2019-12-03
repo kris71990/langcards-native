@@ -1,23 +1,28 @@
 import { StyleSheet } from 'react-native';
 import {
   BASE,
-  GUEST_BUTTON,
   MID_GREY,
+  LIGHT_GREY,
 } from '../../style/colors';
 
 
 export default StyleSheet.create({
   homeBackground: {
     backgroundColor: BASE,
-    borderTopWidth: 5,
-    borderTopColor: GUEST_BUTTON,
   },
   title: {
     textAlign: 'center',
     margin: 10,
     fontSize: 20,
   }, 
+  formContainer: {
+    marginTop: 20,
+  },
+  label: {
+    marginLeft: 20,
+  },  
   textInput: {
+    backgroundColor: LIGHT_GREY,
     borderTopColor: MID_GREY,
     borderBottomColor: MID_GREY,
     borderBottomWidth: 2,
@@ -25,7 +30,8 @@ export default StyleSheet.create({
     borderStyle: 'dashed',
     height: 60,
     fontSize: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginBottom: 20,
   },
 });

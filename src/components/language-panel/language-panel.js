@@ -1,9 +1,10 @@
 import React from 'react';
 import { 
-  TouchableOpacity, SafeAreaView, Modal, Text,
+  TouchableOpacity, SafeAreaView, Modal,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
+import TouchableButton from '../common/buttons/touchableButton';
 import AnimatedFlatList from '../common/animated-flatlist/animated-flatlist';
 import TranslationChoice from '../translation-choice/translation-choice';
 import { LanguageChoicePanel } from '../common/language/language';
@@ -75,18 +76,16 @@ class LanguagePanel extends React.Component {
                   languageCode: null,
                 });
               }}>
-              <TouchableOpacity
-                style={ styles.backButton }
-                onPress={() => {
+              <TouchableButton
+                text={ '<-- Back' }
+                stackNav={() => {
                   return this.setState({ 
                     isModalOpen: false,
                     languageSelection: '',
                     languageCode: null,
                   });
                 }}
-              >
-                <Text style={ styles.backButtonText }>{ '<-- Back' }</Text>
-              </TouchableOpacity>
+              />
               <TranslationChoice
                 formattedLangSelection={ this.props.formattedLangSelection }
                 setTransDir={ this.props.setTransDir }

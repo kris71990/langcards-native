@@ -55,6 +55,26 @@ const wordsFetchRequest = (langData) => (store) => {
     });
 };
 
+const wordUpdateRequest = (word) => (store) => {
+  const { auth: token } = store.getState();
+  console.log(word);
+
+  return fetch(`${API_URL}/word/${word.wordId}`, {
+    method: 'PUT',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(word),
+  })
+    .then((response) => response.json())
+    .then((resJSON) => {
+      return store.dispatch(wordUpdate(resJSON));
+    });
+};
+
 // const wordPostRequest = (word) => (store) => {
 //   const { auth: token } = store.getState();
 
@@ -77,17 +97,6 @@ const wordsFetchRequest = (langData) => (store) => {
 //     });
 // };
 
-// const wordUpdateRequest = word => (store) => {
-//   const { auth: token } = store.getState();
-
-//   return superagent.put(`${API_URL}/word/${word.wordId}`)
-//     .set('Authorization', `Bearer ${token}`)
-//     .send(word)
-//     .then((response) => {
-//       return store.dispatch(wordUpdate(response.body));
-//     });
-// };
-
 // const wordDeleteRequest = id => (store) => {
 //   const { auth: token } = store.getState();
   
@@ -99,6 +108,6 @@ const wordsFetchRequest = (langData) => (store) => {
 // };
 
 export {
-  wordsFetchRequest,
-  // wordPostRequest, wordsBulkPostRequest, wordUpdateRequest, wordDeleteRequest,
+  wordsFetchRequest, wordUpdateRequest,
+  // wordPostRequest, wordsBulkPostRequest, wordDeleteRequest,
 };

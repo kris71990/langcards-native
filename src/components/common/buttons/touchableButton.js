@@ -23,6 +23,11 @@ const TouchableButton = ({ stackNav, text }) => {
       textStyle = 'navButtonText';
       break;
     }
+    case '<-- Back': {
+      touchableStyle = 'backModalButton';
+      textStyle = 'backModalButtonText';
+      break;
+    }
     default: {
       touchableStyle = 'dirButton';
       textStyle = 'dirButtonText';
@@ -85,6 +90,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff5c5c',
   },
   navButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  backModalButton: {
+    padding: 10,
+    backgroundColor: '#ff5c5c',
+  },
+  backModalButtonText: {
     color: 'white',
     fontWeight: 'bold',
   },
