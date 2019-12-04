@@ -264,13 +264,19 @@ class CardLanding extends React.Component {
   }
 
   handleCreateWord(word) {
-    return this.props.wordAdd(word);
+    return this.props.wordAdd(word)
+      .then(() => {
+        return this.setState({
+          adding: false,
+          actionError: undefined,
+        });
+      });
   }
 
   handleUpdateWord(word) {
     return this.props.wordUpdate(word)
       .then(() => {
-        this.setState({
+        return this.setState({
           editing: false,
           actionError: undefined,
         });
@@ -280,6 +286,12 @@ class CardLanding extends React.Component {
   handleDeleteWord() {
     const { words } = this.props;
     const id = words.words[this.state.cardNumber].wordId;
+    const indexArr = indexOptions.createShuffledIndexArray(words.words.length - 1);
+    this.setState({ 
+      cardTracker: indexArr,
+      cardNumber: indexArr[0],
+    });
+
     return this.props.wordDelete(id)
       .then(() => {
         return this.setState({

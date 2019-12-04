@@ -1,11 +1,14 @@
 import React from 'react';
 import { 
-  View, Text, ScrollView, TextInput, Keyboard,
+  View, Text, ScrollView, TextInput, Keyboard, Picker,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
 import TouchableButton from '../common/buttons/touchableButton';
+import ActionError from '../common/errors/errors';
 import formatter from '../../utils/formatter';
+import { wordTypes, wordCategories } from '../../utils/word-properties';
+
 import styles from './form.style';
 import autoBind from '../../utils/autobind';
 
@@ -18,7 +21,7 @@ class EditForm extends React.Component {
       wordLocal: word.wordLocal,
       transliteration: word.transliteration,
       typeOfWord: word.typeOfWord,
-      categoryOfWord: word.category,
+      category: word.category,
       wordDirty: false,
       wordError: undefined,
     };
@@ -46,18 +49,24 @@ class EditForm extends React.Component {
   handleChangeWordEnglish(wordEnglish) {
     return this.setState({ 
       wordEnglish,
+      wordDirty: false,
+      wordError: undefined,
     });
   }
 
   handleChangeWordLocal(wordLocal) {
     return this.setState({ 
       wordLocal,
+      wordDirty: false,
+      wordError: undefined,
     });
   }
 
   handleChangeTransliteration(transliteration) {
     return this.setState({ 
       transliteration,
+      wordDirty: false,
+      wordError: undefined,
     });
   }
 
@@ -117,7 +126,54 @@ class EditForm extends React.Component {
                 </View>
                 : null
             }
+            <Text style={ styles.label }>Type</Text>
+            <View style={ styles.textInput }>
+              <Picker
+                style={ styles.picker }
+                selectedValue={ this.state.typeOfWord }
+                onValueChange={(itemValue) => {
+                  this.setState({ 
+                    typeOfWord: itemValue,
+                    wordDirty: false,
+                    wordError: undefined,
+                  });
+                }}>
+                {
+                  wordTypes.map((type) => {
+                    return (
+                      <Picker.Item key={ type } label={ type } value={ type }/>
+                    );
+                  })
+                }
+              </Picker>
+            </View>
+            <Text style={ styles.label }>Category</Text>
+            <View style={ styles.textInput }>
+              <Picker
+                style={ styles.picker }
+                selectedValue={ this.state.category }
+                onValueChange={(itemValue) => {
+                  this.setState({ 
+                    category: itemValue,
+                    wordDirty: false,
+                    wordError: undefined,
+                  });
+                }}>
+                {
+                  wordCategories.map((type) => {
+                    return (
+                      <Picker.Item key={ type } label={ type } value={ type }/>
+                    );
+                  })
+                }
+              </Picker>
+            </View>
           </View>
+          {
+            this.state.wordError ?
+              <ActionError text={ 'Error: Fill out all required fields' }/>
+              : null
+          }
           <View>
             <TouchableButton
               text="Submit"

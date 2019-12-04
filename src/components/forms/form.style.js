@@ -28,7 +28,6 @@ export default StyleSheet.create({
     borderBottomColor: MID_GREY,
     borderBottomWidth: 2,
     borderTopWidth: 2,
-    borderStyle: 'dashed',
     height: 60,
     fontSize: 20,
     paddingLeft: 20,
@@ -40,5 +39,17 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: ERROR_RED,
+  },
+  pickerContainer: {
+    marginTop: 20,
+    backgroundColor: LIGHT_GREY,
+    borderTopColor: MID_GREY,
+    borderBottomColor: MID_GREY,
+    borderBottomWidth: 2,
+    borderTopWidth: 2,
+  },
+  picker: {
+    color: 'white',
+    marginLeft: -7,
   },
 });

@@ -1,11 +1,12 @@
 import React from 'react';
 import { 
-  View, Text, ScrollView, TextInput, Keyboard,
+  View, Text, ScrollView, TextInput, Keyboard, Picker,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
 import TouchableButton from '../common/buttons/touchableButton';
 import formatter from '../../utils/formatter';
+import { wordTypes, wordCategories } from '../../utils/word-properties';
 import styles from './form.style';
 import autoBind from '../../utils/autobind';
 
@@ -14,7 +15,7 @@ const defaultState = {
   wordLocal: '',
   transliteration: '',
   typeOfWord: '',
-  categoryOfWord: '',
+  category: '',
   wordError: undefined,
   wordDirty: false,
 };
@@ -28,10 +29,21 @@ class AddForm extends React.Component {
 
   handleValidation() {
     const { 
-      wordEnglish, wordLocal, typeOfWord, categoryOfWord, transliteration, 
+      wordEnglish, wordLocal, typeOfWord, category, transliteration, 
     } = this.state;
 
-    if (!wordEnglish || !wordLocal || !typeOfWord || !categoryOfWord || (this.props.baseLang.languageSelectionTransliteration && !transliteration)) {
+    // Scenario 1 - throw error if word already exists
+    const existingWords = this.props.lang.words.map((word) => word.wordLocal);
+    if (existingWords.includes(wordLocal)) {
+      this.setState({
+        wordDirty: true,
+        wordError: 'Word Already Exists',
+      });
+      return false;
+    }
+
+    // Scenario 2 - throw error required field is null
+    if (!wordEnglish || !wordLocal || !typeOfWord || !category || (this.props.baseLang.languageSelectionTransliteration && !transliteration)) {
       this.setState({
         wordDirty: true,
         wordError: 'Error',
@@ -39,6 +51,7 @@ class AddForm extends React.Component {
       return false;
     }
 
+    // Scenario 3 - valid condition, post word
     this.setState({
       wordDirty: false,
       wordError: undefined,
@@ -69,7 +82,7 @@ class AddForm extends React.Component {
 
   handleSubmit() {
     if (this.handleValidation()) {
-      return this.props.onComplete(this.state);
+      return this.props.onComplete({ ...this.state, languageId: this.props.lang.languageId });
     } 
     return null;
   }
@@ -122,6 +135,42 @@ class AddForm extends React.Component {
                 </View>
                 : null
             }
+            <Text style={ styles.label }>Type</Text>
+            <View style={ styles.textInput }>
+              <Picker
+                style={ styles.picker }
+                selectedValue={ this.state.typeOfWord }
+                onValueChange={(itemValue) => {
+                  this.setState({ typeOfWord: itemValue });
+                }}>
+                  <Picker.Item label={ 'Select' } value={ null }/>
+                {
+                  wordTypes.map((type) => {
+                    return (
+                      <Picker.Item key={ type } label={ type } value={ type }/>
+                    );
+                  })
+                }
+              </Picker>
+            </View>
+            <Text style={ styles.label }>Category</Text>
+            <View style={ styles.textInput }>
+              <Picker
+                style={ styles.picker }
+                selectedValue={ this.state.category }
+                onValueChange={(itemValue) => {
+                  this.setState({ category: itemValue });
+                }}>
+                  <Picker.Item label={ 'Select' } value={ null }/>
+                {
+                  wordCategories.map((category) => {
+                    return (
+                      <Picker.Item key={ category } label={ category } value={ category }/>
+                    );
+                  })
+                }
+              </Picker>
+            </View>
           </View>
           {
             this.state.wordError ? 
