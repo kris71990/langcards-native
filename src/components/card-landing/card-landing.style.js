@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 import { 
   BASE, 
   CARD_BACKGROUND,
-  ERROR_RED,
 } from '../../style/colors';
 
 export default StyleSheet.create({
@@ -60,12 +59,6 @@ export default StyleSheet.create({
   subheaderText: {
     fontWeight: 'bold',
   },  
-  errorMessage: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    color: ERROR_RED,
-    textAlign: 'center',
-  },
   green: {
     color: '#0A9E11',
   },

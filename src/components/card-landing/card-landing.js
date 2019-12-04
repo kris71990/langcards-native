@@ -9,6 +9,7 @@ import TouchableButton from '../common/buttons/touchableButton';
 import EditFormModal from '../modals/edit-modal';
 import ConfirmModal from '../modals/confirm-modal';
 import AddFormModal from '../modals/add-modal';
+import ActionError from '../common/errors/errors';
 import { CardViewButton, CardItemTextBlock } from '../common/card/card';
 import { resetHomeStack } from '../../utils/home-stack-actions';
 import scoreParser from '../../utils/score-parser';
@@ -509,7 +510,7 @@ class CardLanding extends React.Component {
               </View>
               { 
                 this.state.actionError 
-                  ? <Text style={ styles.errorMessage }>Log in to { this.state.actionError }</Text> 
+                  ? <ActionError text={ `Log in to ${this.state.actionError}` }/> 
                   : null 
               }
             </View>
@@ -525,6 +526,11 @@ class CardLanding extends React.Component {
                   return this.setState({ adding: false, actionError: 'add' });
                 } }
               />
+              {
+                this.state.actionError 
+                  ? <ActionError text={ `Log in to ${this.state.actionError}`}/>
+                  : null
+              }
             </View>
         }
       </View>
