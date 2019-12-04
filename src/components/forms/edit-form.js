@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import TouchableButton from '../common/buttons/touchableButton';
 import formatter from '../../utils/formatter';
-import styles from './edit-form.style';
+import styles from './form.style';
 import autoBind from '../../utils/autobind';
 
 class EditForm extends React.Component {

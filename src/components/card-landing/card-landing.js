@@ -1,7 +1,5 @@
 import React from 'react';
-import { 
-  View, Text, TouchableOpacity,
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import CheckBox from '@react-native-community/checkbox';
@@ -9,6 +7,8 @@ import PropTypes from 'prop-types';
 
 import TouchableButton from '../common/buttons/touchableButton';
 import EditFormModal from '../modals/edit-modal';
+import ConfirmModal from '../modals/confirm-modal';
+import AddFormModal from '../modals/add-modal';
 import { CardViewButton, CardItemTextBlock } from '../common/card/card';
 import { resetHomeStack } from '../../utils/home-stack-actions';
 import scoreParser from '../../utils/score-parser';
@@ -43,7 +43,8 @@ class CardLanding extends React.Component {
       color: 'black',
       editing: false,
       actionError: undefined,
-      delete: false,
+      deleting: false,
+      adding: false,
     };
     autoBind.call(this, CardLanding);
   }
@@ -261,6 +262,10 @@ class CardLanding extends React.Component {
     }
   }
 
+  handleCreateWord(word) {
+    return this.props.wordAdd(word);
+  }
+
   handleUpdateWord(word) {
     return this.props.wordUpdate(word)
       .then(() => {
@@ -271,9 +276,22 @@ class CardLanding extends React.Component {
       });
   }
 
+  handleDeleteWord() {
+    const { words } = this.props;
+    const id = words.words[this.state.cardNumber].wordId;
+    return this.props.wordDelete(id)
+      .then(() => {
+        return this.setState({
+          deleting: false,
+        });
+      });
+  }
+
   render() {
     const { words, navigation, token } = this.props;
-    const { score, editing } = this.state;
+    const { 
+      score, editing, deleting, adding, 
+    } = this.state;
 
     const { 
       cardNumber, answer, hintType, hintCategory, hintTransliteration,
@@ -288,6 +306,8 @@ class CardLanding extends React.Component {
 
     let cardJSX;
     let editJSX;
+    let deleteJSX;
+    let addJSX;
     if (flashcardWords && flashcardWords.length > 0) {
       switch (words.translationDirection) {
         case 'native-english':
@@ -368,6 +388,29 @@ class CardLanding extends React.Component {
       editJSX = null;
     }
 
+    if (deleting && token) {
+      deleteJSX = 
+        <ConfirmModal
+          messageTxt={ 'Are you sure you want to delete?' }
+          onConfirm={ this.handleDeleteWord }
+          onBack={ () => this.setState({ deleting: false, actionError: undefined }) }
+        />;
+    } else {
+      deleteJSX = null;
+    }
+
+    if (adding && token) {
+      addJSX = 
+        <AddFormModal
+          close={ () => this.setState({ adding: false, actionError: undefined })}
+          lang={ this.props.words }
+          baseLang={ this.props.languageProperties }
+          onComplete={ this.handleCreateWord }
+        />;
+    } else {
+      addJSX = null;
+    }
+
     return (
       <View style={ styles.cardContainer }>
         <View style={ styles.appNavButtons }>
@@ -375,12 +418,18 @@ class CardLanding extends React.Component {
             text="Back to Languages"
             stackNav={ () => navigation.navigate('Main') }
           />
-          <TouchableButton 
-            text="Login"
-            stackNav={ () => navigation.dispatch(resetHomeStack) }
-          />
+          {
+            !token ?
+              <TouchableButton 
+                text="Login"
+                stackNav={ () => navigation.dispatch(resetHomeStack) }
+              />
+              : null
+          }
         </View>
         { editJSX }
+        { deleteJSX }
+        { addJSX }
         {
           flashcardWords && flashcardWords.length > 0
             ? 
@@ -436,14 +485,19 @@ class CardLanding extends React.Component {
                   text="Delete"
                   action={ () => {
                     if (token) {
-                      return this.setState({ delete: true, actionError: undefined });
+                      return this.setState({ deleting: true, actionError: undefined });
                     }
-                    return this.setState({ delete: false, actionError: 'delete' });
-                  }}
+                    return this.setState({ deleting: false, actionError: 'delete' });
+                  } }
                 />
                 <CardViewButton
                   text="Add"
-                  action={ () => null }
+                  action={ () => {
+                    if (token) {
+                      return this.setState({ adding: true, actionError: undefined });
+                    }
+                    return this.setState({ adding: false, actionError: 'add' });
+                  } }
                 />
               </View>
               { 
@@ -457,9 +511,9 @@ class CardLanding extends React.Component {
               <Text>There are currently no flashcards to study for { words.language }.</Text>
               <Text>Add some words!</Text>
               <CardViewButton
-                  text="Add Words"
-                  action={ () => null }
-                />
+                text="Add Words"
+                action={ () => null }
+              />
             </View>
         }
       </View>
@@ -473,13 +527,16 @@ CardLanding.propTypes = {
   words: PropTypes.object,
   languageProperties: PropTypes.object,
   wordsFetch: PropTypes.func,
+  wordAdd: PropTypes.func,
   wordUpdate: PropTypes.func,
+  wordDelete: PropTypes.func,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   wordsFetch: (lang) => dispatch(wordActions.wordsFetchRequest(lang)),
   wordUpdate: (word) => dispatch(wordActions.wordUpdateRequest(word)),
-  // wordDelete: (id) => dispatch(wordActions.wordDeleteRequest(id)),
+  wordDelete: (id) => dispatch(wordActions.wordDeleteRequest(id)),
+  wordAdd: (word) => dispatch(wordActions.wordPostRequest(word)),
 });
 
 const mapStateToProps = (state) => {

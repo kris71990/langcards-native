@@ -3,6 +3,7 @@ import {
   BASE,
   MID_GREY,
   LIGHT_GREY,
+  ERROR_RED,
 } from '../../style/colors';
 
 
@@ -33,5 +34,11 @@ export default StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     marginBottom: 20,
+  },
+  errorMsg: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: ERROR_RED,
   },
 });
