@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { 
   View, Text, SafeAreaView, TouchableOpacity,
 } from 'react-native';
+import { connect } from 'react-redux';
 
 import LoginButton from '../common/buttons/loginButton';
 import AnimatedFlatList from '../common/animated-flatlist/animated-flatlist';
@@ -45,15 +46,18 @@ class LanguageInfo extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, token } = this.props;
 
     return (
       <SafeAreaView style={ styles.listContainer }>
-        <View>
-          <LoginButton
-            stackNav={ () => navigation.dispatch(resetHomeStack) }
-          />
-        </View>
+        { !token ?
+            <View>
+              <LoginButton
+                stackNav={ () => navigation.dispatch(resetHomeStack) }
+              />
+            </View>
+          : null
+        }
         <Text style={ headers.title }>Languages</Text>
         <AnimatedFlatList
           style={ styles.flatList }
@@ -74,6 +78,13 @@ class LanguageInfo extends React.Component {
 
 LanguageInfo.propTypes = {
   navigation: PropTypes.object,
+  token: PropTypes.string,
 };
 
-export default LanguageInfo;
+const mapStateToProps = (state) => {
+  return {
+    token: state.auth,
+  };
+};
+
+export default connect(mapStateToProps, null)(LanguageInfo);

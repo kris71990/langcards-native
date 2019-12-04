@@ -112,7 +112,7 @@ class AddForm extends React.Component {
                   <Text style={ styles.label }>Transliteration</Text>
                   <TextInput
                     style={ styles.textInput }
-                    placeholder="ni hao"
+                    placeholder="ex. ni hao"
                     placeholderTextColor="white"
                     underlineColorAndroid="transparent"
                     onBlur={ Keyboard.dismiss }

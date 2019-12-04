@@ -290,18 +290,25 @@ class CardLanding extends React.Component {
   render() {
     const { words, navigation, token } = this.props;
     const { 
-      score, editing, deleting, adding, 
+      score, 
+      editing, 
+      deleting, 
+      adding, 
+      cardNumber, 
+      answer, 
+      hintType, 
+      hintCategory, 
+      hintTransliteration,
     } = this.state;
 
-    const { 
-      cardNumber, answer, hintType, hintCategory, hintTransliteration,
-    } = this.state;
+    let formattedLang;
     let flashcardWords;
     let totalWords;
 
     if (words && words.words) {
       flashcardWords = words.words;
       totalWords = flashcardWords.length;
+      formattedLang = cardViewFormatter({ type: 'language-simple', language: words.language });
     }
 
     let cardJSX;
@@ -507,12 +514,16 @@ class CardLanding extends React.Component {
               }
             </View>
             : 
-            <View>
-              <Text>There are currently no flashcards to study for { words.language }.</Text>
-              <Text>Add some words!</Text>
-              <CardViewButton
+            <View style={ styles.nullCardsContainer }>
+              <Text style={ styles.nullCardsContainerTxt }>There are currently no flashcards to study for { formattedLang }.</Text>
+              <TouchableButton
                 text="Add Words"
-                action={ () => null }
+                stackNav={ () => {
+                  if (token) {
+                    return this.setState({ adding: true, actionError: undefined });
+                  }
+                  return this.setState({ adding: false, actionError: 'add' });
+                } }
               />
             </View>
         }

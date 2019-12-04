@@ -15,6 +15,15 @@ export default StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: BASE,
   },
+  nullCardsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },  
+  nullCardsContainerTxt: {
+    marginLeft: 40,
+    marginRight: 40,
+    fontSize: 20,
+  },  
   cardHeader: {
     marginTop: 30,
     fontSize: 24,
