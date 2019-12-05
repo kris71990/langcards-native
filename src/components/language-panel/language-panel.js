@@ -26,6 +26,7 @@ class LanguagePanel extends React.Component {
   }
 
   handleChange(item) {
+    console.log(item);
     this.props.setLanguage({ 
       lang: item.languageName, 
       id: item.languageId, 

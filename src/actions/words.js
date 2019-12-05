@@ -52,7 +52,6 @@ const wordsFetchRequest = (langData) => (store) => {
 
 const wordPostRequest = (word) => (store) => {
   const { auth: token } = store.getState();
-  console.log(word);
 
   return fetch(`${API_URL}/word`, {
     method: 'POST',

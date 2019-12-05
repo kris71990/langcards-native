@@ -34,23 +34,30 @@ const languagesFetchRequest = () => (store) => {
     });
 };
 
-// const languageCreateRequest = lang => (store) => {
-//   const { auth: token } = store.getState();
-//   const { 
-//     selectedLanguage, transliteration, spokenIn, family, totalSpeakers, 
-//   } = lang;
+const languageCreateRequest = (lang) => (store) => {
+  const { auth: token } = store.getState();
+  const { 
+    selectedLanguage, transliteration, spokenIn, family, totalSpeakers, 
+  } = lang;
 
-//   return superagent.post(`${API_URL}/language`)
-//     .set('Authorization', `Bearer ${token}`)
-//     .set('Content-Type', 'application/json')
-//     .send({ 
-//       languageName: selectedLanguage, transliteration, spokenIn, family, totalSpeakers, wordCount: 0, 
-//     })
-//     .then((response) => {
-//       return store.dispatch(languageAdd(response.body.language));
-//     });
-// };
+  return fetch(`${API_URL}/language`, {
+    method: 'POST',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      languageName: selectedLanguage, transliteration, spokenIn, family, totalSpeakers, wordCount: 0, 
+    }),
+  })
+    .then((response) => response.json())
+    .then((resJSON) => {
+      return store.dispatch(languageAdd(resJSON));
+    });
+};
 
 export { 
-  languageAdd, languageSelect, languagesFetch, languagesFetchRequest, languageTransDirSet,
+  languageSelect, languageCreateRequest, languagesFetchRequest, languageTransDirSet,
 };

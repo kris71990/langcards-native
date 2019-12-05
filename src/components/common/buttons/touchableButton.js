@@ -18,6 +18,21 @@ const TouchableButton = ({ stackNav, text }) => {
       textStyle = 'navButtonText';
       break;
     }
+    case 'Add': {
+      touchableStyle = 'addLanguageButton';
+      textStyle = 'addLanguageButtonText';
+      break;
+    }
+    case 'Add a new Language': {
+      touchableStyle = 'hideLanguageButton';
+      textStyle = 'hideLanguageButtonText';
+      break;
+    }
+    case 'Hide Language Menu': {
+      touchableStyle = 'hideLanguageButton';
+      textStyle = 'hideLanguageButtonText';
+      break;
+    }
     case 'Login': {
       touchableStyle = 'loginButton';
       textStyle = 'navButtonText';
@@ -100,6 +115,30 @@ const styles = StyleSheet.create({
   backModalButtonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  addLanguageButton: {
+    width: 100,
+    marginTop: 20,
+    marginBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: GUEST_BUTTON,
+  },
+  addLanguageButtonText: {
+    textAlign: 'center',
+    color: 'white',
+  },
+  hideLanguageButton: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: GUEST_BUTTON,
+  },
+  hideLanguageButtonText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 20,
   },
 });
 
