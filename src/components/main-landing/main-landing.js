@@ -28,7 +28,8 @@ class MainLanding extends React.Component {
     super(props);
     this.state = {
       authError: false,
-      toggleMenu: false, 
+      toggleMenu: false,
+      serverError: false, 
     };
     autoBind.call(this, MainLanding);
   }
@@ -112,15 +113,15 @@ class MainLanding extends React.Component {
   }
   
   render() {
-    const { navigation } = this.props;
+    const { navigation, token } = this.props;
     const { 
-      languages, languageSelection, 
+      languages, languageSelection,
     } = this.props.language;
     const { toggleMenu, authError } = this.state;
 
     let formattedLangSelection;
     let currentLangs;
-    if (languages) currentLangs = languages.map((lang) => lang.languageName);
+    if (languages) currentLangs = languages.map((lang) => lang.languageName.toLowerCase());
     if (languageSelection) {
       formattedLangSelection = `${languageSelection.charAt(0).toUpperCase()}${languageSelection.slice(1)}`;
     }
@@ -128,7 +129,7 @@ class MainLanding extends React.Component {
     return (
       <SafeAreaView style={ styles.homeBackground }>
         {
-          !this.props.token ?
+          !token ?
             <View>
               <LoginButton
                 stackNav={ () => navigation.dispatch(resetHomeStack) }

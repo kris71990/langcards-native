@@ -29,8 +29,8 @@ const languagesFetchRequest = () => (store) => {
     .then((resJson) => {
       return store.dispatch(languagesFetch(resJson));
     })
-    .catch((error) => {
-      console.log(error);
+    .catch(() => {
+      return Promise.resolve(false);
     });
 };
 
