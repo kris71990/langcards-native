@@ -1,13 +1,15 @@
 import React from 'react';
-import { 
-  View, Text, TouchableOpacity,
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import CheckBox from '@react-native-community/checkbox';
 import PropTypes from 'prop-types';
 
 import TouchableButton from '../common/buttons/touchableButton';
+import EditFormModal from '../modals/edit-modal';
+import ConfirmModal from '../modals/confirm-modal';
+import AddFormModal from '../modals/add-modal';
+import ActionError from '../common/errors/errors';
 import { CardViewButton, CardItemTextBlock } from '../common/card/card';
 import { resetHomeStack } from '../../utils/home-stack-actions';
 import scoreParser from '../../utils/score-parser';
@@ -42,7 +44,8 @@ class CardLanding extends React.Component {
       color: 'black',
       editing: false,
       actionError: undefined,
-      delete: false,
+      deleting: false,
+      adding: false,
     };
     autoBind.call(this, CardLanding);
   }
@@ -190,7 +193,7 @@ class CardLanding extends React.Component {
       hintType: false,
       hintTransliteration: false,
       color: updatedColor,
-      editError: undefined,
+      actionError: undefined,
     });
   }
 
@@ -198,6 +201,7 @@ class CardLanding extends React.Component {
     const flip = !this.state.answer;
     return this.setState({
       answer: flip,
+      actionError: undefined,
     });
   }
 
@@ -206,6 +210,7 @@ class CardLanding extends React.Component {
       hintCategory: false,
       hintType: false,
       hintTransliteration: false,
+      actionError: undefined,
     });
   }
 
@@ -221,18 +226,21 @@ class CardLanding extends React.Component {
             hintCategory: true,
             hintType: false,
             hintTransliteration: false,
+            actionError: undefined,
           });
         case 1:
           return this.setState({
             hintType: true,
             hintCategory: false,
             hintTransliteration: false,
+            actionError: undefined,
           });
         default:
           return this.setState({
             hintType: false,
             hintCategory: false,
             hintTransliteration: true,
+            actionError: undefined,
           });
       }
     }
@@ -243,32 +251,83 @@ class CardLanding extends React.Component {
           hintCategory: true,
           hintType: false,
           hintTransliteration: false,
+          actionError: undefined,
         });
       default: 
         return this.setState({
           hintType: true,
           hintCategory: false,
           hintTransliteration: false,
+          actionError: undefined,
         });
     }
   }
 
-  render() {
-    const { words, navigation } = this.props;
-    const { score } = this.state;
+  handleCreateWord(word) {
+    return this.props.wordAdd(word)
+      .then(() => {
+        return this.setState({
+          adding: false,
+          actionError: undefined,
+        });
+      });
+  }
 
+  handleUpdateWord(word) {
+    return this.props.wordUpdate(word)
+      .then(() => {
+        return this.setState({
+          editing: false,
+          actionError: undefined,
+        });
+      });
+  }
+
+  handleDeleteWord() {
+    const { words } = this.props;
+    const id = words.words[this.state.cardNumber].wordId;
+    const indexArr = indexOptions.createShuffledIndexArray(words.words.length - 1);
+    this.setState({ 
+      cardTracker: indexArr,
+      cardNumber: indexArr[0],
+    });
+
+    return this.props.wordDelete(id)
+      .then(() => {
+        return this.setState({
+          deleting: false,
+        });
+      });
+  }
+
+  render() {
+    const { words, navigation, token } = this.props;
     const { 
-      cardNumber, answer, hintType, hintCategory, hintTransliteration,
+      score, 
+      editing, 
+      deleting, 
+      adding, 
+      cardNumber, 
+      answer, 
+      hintType, 
+      hintCategory, 
+      hintTransliteration,
     } = this.state;
+
+    let formattedLang;
     let flashcardWords;
     let totalWords;
 
     if (words && words.words) {
       flashcardWords = words.words;
       totalWords = flashcardWords.length;
+      formattedLang = cardViewFormatter({ type: 'language-simple', language: words.language });
     }
 
     let cardJSX;
+    let editJSX;
+    let deleteJSX;
+    let addJSX;
     if (flashcardWords && flashcardWords.length > 0) {
       switch (words.translationDirection) {
         case 'native-english':
@@ -336,6 +395,42 @@ class CardLanding extends React.Component {
       }
     }
 
+    if (editing && token) {
+      editJSX = 
+        <EditFormModal
+          close={ () => this.setState({ editing: false, actionError: undefined })}
+          word={ flashcardWords[this.state.cardNumber] }
+          lang={ this.props.words }
+          baseLang={ this.props.languageProperties }
+          onComplete={ this.handleUpdateWord }
+        />;
+    } else {
+      editJSX = null;
+    }
+
+    if (deleting && token) {
+      deleteJSX = 
+        <ConfirmModal
+          messageTxt={ 'Are you sure you want to delete?' }
+          onConfirm={ this.handleDeleteWord }
+          onBack={ () => this.setState({ deleting: false, actionError: undefined }) }
+        />;
+    } else {
+      deleteJSX = null;
+    }
+
+    if (adding && token) {
+      addJSX = 
+        <AddFormModal
+          close={ () => this.setState({ adding: false, actionError: undefined })}
+          lang={ this.props.words }
+          baseLang={ this.props.languageProperties }
+          onComplete={ this.handleCreateWord }
+        />;
+    } else {
+      addJSX = null;
+    }
+
     return (
       <View style={ styles.cardContainer }>
         <View style={ styles.appNavButtons }>
@@ -343,11 +438,18 @@ class CardLanding extends React.Component {
             text="Back to Languages"
             stackNav={ () => navigation.navigate('Main') }
           />
-          <TouchableButton 
-            text="Login"
-            stackNav={ () => navigation.dispatch(resetHomeStack) }
-          />
+          {
+            !token ?
+              <TouchableButton 
+                text="Login"
+                stackNav={ () => navigation.dispatch(resetHomeStack) }
+              />
+              : null
+          }
         </View>
+        { editJSX }
+        { deleteJSX }
+        { addJSX }
         {
           flashcardWords && flashcardWords.length > 0
             ? 
@@ -392,26 +494,55 @@ class CardLanding extends React.Component {
               <View style={ styles.buttonsContainer }>
                 <CardViewButton
                   text="Edit"
-                  action={ () => null }
+                  action={ () => {
+                    if (token) {
+                      return this.setState({ editing: true, actionError: undefined });
+                    }
+                    return this.setState({ editing: false, actionError: 'edit' });
+                  }}
                 />
                 <CardViewButton
                   text="Delete"
-                  action={ () => null }
+                  action={ () => {
+                    if (token) {
+                      return this.setState({ deleting: true, actionError: undefined });
+                    }
+                    return this.setState({ deleting: false, actionError: 'delete' });
+                  } }
                 />
                 <CardViewButton
                   text="Add"
-                  action={ () => null }
+                  action={ () => {
+                    if (token) {
+                      return this.setState({ adding: true, actionError: undefined });
+                    }
+                    return this.setState({ adding: false, actionError: 'add' });
+                  } }
                 />
               </View>
+              { 
+                this.state.actionError 
+                  ? <ActionError text={ `Log in to ${this.state.actionError}` }/> 
+                  : null 
+              }
             </View>
             : 
-            <View>
-              <Text>There are currently no flashcards to study for { words.language }.</Text>
-              <Text>Add some words!</Text>
-              <CardViewButton
-                  text="Add Words"
-                  action={ () => null }
-                />
+            <View style={ styles.nullCardsContainer }>
+              <Text style={ styles.nullCardsContainerTxt }>There are currently no flashcards to study for { formattedLang }.</Text>
+              <TouchableButton
+                text="Add Words"
+                stackNav={ () => {
+                  if (token) {
+                    return this.setState({ adding: true, actionError: undefined });
+                  }
+                  return this.setState({ adding: false, actionError: 'add' });
+                } }
+              />
+              {
+                this.state.actionError 
+                  ? <ActionError text={ `Log in to ${this.state.actionError}`}/>
+                  : null
+              }
             </View>
         }
       </View>
@@ -421,19 +552,25 @@ class CardLanding extends React.Component {
 
 CardLanding.propTypes = {
   navigation: PropTypes.object,
+  token: PropTypes.string,
   words: PropTypes.object,
   languageProperties: PropTypes.object,
   wordsFetch: PropTypes.func,
+  wordAdd: PropTypes.func,
+  wordUpdate: PropTypes.func,
+  wordDelete: PropTypes.func,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   wordsFetch: (lang) => dispatch(wordActions.wordsFetchRequest(lang)),
-  // wordUpdate: (word) => dispatch(wordActions.wordUpdateRequest(word)),
-  // wordDelete: (id) => dispatch(wordActions.wordDeleteRequest(id)),
+  wordUpdate: (word) => dispatch(wordActions.wordUpdateRequest(word)),
+  wordDelete: (id) => dispatch(wordActions.wordDeleteRequest(id)),
+  wordAdd: (word) => dispatch(wordActions.wordPostRequest(word)),
 });
 
 const mapStateToProps = (state) => {
   return {
+    token: state.auth,
     words: {
       language: state.words.languageSelection,
       languageId: state.words.languageSelectionCode,

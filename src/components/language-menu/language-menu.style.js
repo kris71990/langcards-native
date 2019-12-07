@@ -1,11 +1,18 @@
 import { StyleSheet } from 'react-native';
+import { LIGHT_GREY, MID_GREY } from '../../style/colors';
 
 export default StyleSheet.create({
-  pickerContainer: {
-    width: 200,
+  menuContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
-    borderWidth: 1,
-    backgroundColor: 'white',
-    alignSelf: 'center',
+  },
+  pickerContainer: {
+    flex: 1,
+    marginRight: 10,
+    backgroundColor: LIGHT_GREY,
+    borderColor: MID_GREY,
+    borderWidth: 2,
   },
 });

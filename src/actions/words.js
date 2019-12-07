@@ -23,11 +23,6 @@ const wordDelete = (id) => ({
   payload: id,
 });
 
-const wordsBulkAdd = (words) => ({
-  type: 'BULK_ADD',
-  payload: words,
-});
-
 const wordsFetchRequest = (langData) => (store) => {
   const { 
     languageSelection, languageSelectionCode, translationDirection, languageSelectionLocal, languageSelectionTransliteration, spokenIn, family, totalSpeakers,
@@ -55,50 +50,61 @@ const wordsFetchRequest = (langData) => (store) => {
     });
 };
 
-// const wordPostRequest = (word) => (store) => {
-//   const { auth: token } = store.getState();
+const wordPostRequest = (word) => (store) => {
+  const { auth: token } = store.getState();
 
-//   return superagent.post(`${API_URL}/word`)
-//     .set('Authorization', `Bearer ${token}`)
-//     .send(word)
-//     .then((response) => {
-//       return store.dispatch(wordAdd(response.body));
-//     });
-// };
+  return fetch(`${API_URL}/word`, {
+    method: 'POST',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(word),
+  })
+    .then((response) => response.json())
+    .then((resJSON) => {
+      return store.dispatch(wordAdd(resJSON));
+    });
+};
 
-// const wordsBulkPostRequest = words => (store) => {
-//   const { auth: token } = store.getState();
+const wordUpdateRequest = (word) => (store) => {
+  const { auth: token } = store.getState();
+
+  return fetch(`${API_URL}/word/${word.wordId}`, {
+    method: 'PUT',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(word),
+  })
+    .then((response) => response.json())
+    .then((resJSON) => {
+      return store.dispatch(wordUpdate(resJSON));
+    });
+};
+
+const wordDeleteRequest = (id) => (store) => {
+  const { auth: token } = store.getState();
   
-//   return superagent.post(`${API_URL}/words/bulk`)
-//     .set('Authorization', `Bearer ${token}`)
-//     .send(words)
-//     .then((response) => {
-//       return store.dispatch(wordsBulkAdd(response.body));
-//     });
-// };
-
-// const wordUpdateRequest = word => (store) => {
-//   const { auth: token } = store.getState();
-
-//   return superagent.put(`${API_URL}/word/${word.wordId}`)
-//     .set('Authorization', `Bearer ${token}`)
-//     .send(word)
-//     .then((response) => {
-//       return store.dispatch(wordUpdate(response.body));
-//     });
-// };
-
-// const wordDeleteRequest = id => (store) => {
-//   const { auth: token } = store.getState();
-  
-//   return superagent.delete(`${API_URL}/word/${id}`)
-//     .set('Authorization', `Bearer ${token}`)
-//     .then(() => {
-//       return store.dispatch(wordDelete(id));
-//     });
-// };
+  return fetch(`${API_URL}/word/${id}`, {
+    method: 'DELETE',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+  })
+    .then(() => {
+      return store.dispatch(wordDelete(id));
+    });
+};
 
 export {
-  wordsFetchRequest,
-  // wordPostRequest, wordsBulkPostRequest, wordUpdateRequest, wordDeleteRequest,
+  wordsFetchRequest, wordUpdateRequest, wordDeleteRequest, wordPostRequest,
 };

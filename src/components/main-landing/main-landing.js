@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   SafeAreaView,
   View,
-  Button,
   Text,
   ActivityIndicator,
 } from 'react-native';
@@ -12,9 +11,12 @@ import { connect } from 'react-redux';
 import LanguageMenu from '../language-menu/language-menu';
 import LanguagePanel from '../language-panel/language-panel';
 import LoginButton from '../common/buttons/loginButton';
+import ActionError from '../common/errors/errors';
+import TouchableButton from '../common/buttons/touchableButton';
 
 import * as languageActions from '../../actions/language';
 import * as wordActions from '../../actions/words';
+import * as profileActions from '../../actions/profile';
 import { resetHomeStack, goToCards } from '../../utils/home-stack-actions';
 
 import autoBind from '../../utils/autobind';
@@ -26,7 +28,8 @@ class MainLanding extends React.Component {
     super(props);
     this.state = {
       authError: false,
-      toggleMenu: false, 
+      toggleMenu: false,
+      serverError: false, 
     };
     autoBind.call(this, MainLanding);
   }
@@ -36,14 +39,23 @@ class MainLanding extends React.Component {
   };
 
   componentDidMount() {
-    // if (this.props.token) this.props.fetchProfile();
+    if (this.props.token && !this.props.profile) this.props.fetchProfile();
     return this.props.languagesFetch();
   }
 
   handleToggle() {
+    const { token } = this.props;
+
+    if (token) {
+      return this.setState({
+        toggleMenu: !this.state.toggleMenu,
+        authError: false,
+      });
+    }
+
     return this.setState({
-      toggleMenu: !this.state.toggleMenu,
-      authError: false,
+      toggleMenu: false,
+      authError: true,
     });
   }
 
@@ -68,17 +80,48 @@ class MainLanding extends React.Component {
     }
     return this.props.setLanguage();
   }
+  
+  handleLanguageSelection(lang) {
+    this.setState({
+      toggleMenu: false,
+      authError: false,
+    });
+    return this.props.setLanguage(lang);
+  }
 
+  handleCreateLanguage(lang) {
+    if (!this.props.token) {
+      this.setState({
+        authError: true,
+        toggleMenu: false,
+      });
+      return null;
+    }
+
+    const { profile } = this.props;
+    return this.props.createLanguage(lang)
+      .then(() => {
+        this.setState({
+          authError: false,
+          toggleMenu: false,
+        });
+        console.log('language created'); // eslint-disable-line
+      })
+      .then(() => {
+        return this.props.updateProfile(profile, lang.selectedLanguage, null);
+      });
+  }
+  
   render() {
-    const { navigation } = this.props;
+    const { navigation, token } = this.props;
     const { 
-      languages, languageSelection, 
+      languages, languageSelection,
     } = this.props.language;
     const { toggleMenu, authError } = this.state;
 
     let formattedLangSelection;
     let currentLangs;
-    if (languages) currentLangs = languages.map((lang) => lang.languageName);
+    if (languages) currentLangs = languages.map((lang) => lang.languageName.toLowerCase());
     if (languageSelection) {
       formattedLangSelection = `${languageSelection.charAt(0).toUpperCase()}${languageSelection.slice(1)}`;
     }
@@ -86,7 +129,7 @@ class MainLanding extends React.Component {
     return (
       <SafeAreaView style={ styles.homeBackground }>
         {
-          !this.props.token ?
+          !token ?
             <View>
               <LoginButton
                 stackNav={ () => navigation.dispatch(resetHomeStack) }
@@ -98,13 +141,13 @@ class MainLanding extends React.Component {
           <View style={ styles.sectionContainer }>
             <Text style={ styles.headerTitle }>Choose a Language</Text>
             <Text style={ styles.headerConjunction }>OR</Text>
-            <Button 
-              title={ toggleMenu ? 'Hide Language Menu' : 'Add a new Language' }
-              onPress={ this.handleToggle }
+            <TouchableButton 
+              text={ toggleMenu ? 'Hide Language Menu' : 'Add a new Language' }
+              stackNav={ this.handleToggle }
             />
             {
               authError 
-                ? <Text>Log in or sign up to add a language</Text>
+                ? <ActionError text={ 'Login or signup to add a language' }/>
                 : null
             }
           </View>
@@ -113,6 +156,7 @@ class MainLanding extends React.Component {
               toggleMenu
                 ? <LanguageMenu
                     currentLangs={ currentLangs }
+                    onComplete={ this.handleCreateLanguage }
                   />
                 : null
             }
@@ -123,7 +167,7 @@ class MainLanding extends React.Component {
           languages
             ? <LanguagePanel 
                 languages={ languages }
-                setLanguage={ this.props.setLanguage }
+                setLanguage={ (lang) => this.handleLanguageSelection(lang) }
                 setTransDir={ this.props.setTransDir }
                 showCards={ this.handleChoice }
                 formattedLangSelection={ formattedLangSelection }
@@ -140,17 +184,21 @@ MainLanding.propTypes = {
   navigation: PropTypes.object,
   token: PropTypes.string,
   language: PropTypes.object,
+  profile: PropTypes.object,
   languagesFetch: PropTypes.func,
   setLanguage: PropTypes.func,
   setTransDir: PropTypes.func,
   wordsFetch: PropTypes.func,
+  createLanguage: PropTypes.func,
+  fetchProfile: PropTypes.func,
+  updateProfile: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
   return {
     language: state.language,
     token: state.auth,
-    // profile: state.profile,
+    profile: state.profile,
   };
 };
 
@@ -160,11 +208,8 @@ const mapDispatchToProps = (dispatch) => ({
   setTransDir: (dir) => dispatch(languageActions.languageTransDirSet(dir)),
   createLanguage: (lang) => dispatch(languageActions.languageCreateRequest(lang)),
   wordsFetch: (lang) => dispatch(wordActions.wordsFetchRequest(lang)),
-  // signup: user => dispatch(authActions.signupRequest(user)),
-  // login: user => dispatch(authActions.loginRequest(user)),
-  // createProfile: username => dispatch(profileActions.createProfileReq(username)),
-  // fetchProfile: () => dispatch(profileActions.fetchProfileReq()),
-  // updateProfile: (profile, lang, words) => dispatch(profileActions.updateProfileReq(profile, lang, words)),
+  fetchProfile: () => dispatch(profileActions.fetchProfileReq()),
+  updateProfile: (profile, lang, words) => dispatch(profileActions.updateProfileReq(profile, lang, words)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainLanding);

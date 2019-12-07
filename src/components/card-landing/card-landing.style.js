@@ -14,6 +14,15 @@ export default StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: BASE,
   },
+  nullCardsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },  
+  nullCardsContainerTxt: {
+    marginLeft: 40,
+    marginRight: 40,
+    fontSize: 20,
+  },  
   cardHeader: {
     marginTop: 30,
     fontSize: 24,
@@ -69,10 +78,3 @@ export default StyleSheet.create({
     color: '#DE1610',
   },
 });
-
-// $score-green: #0A9E11;
-// $score-teal: #0CA693;
-// $score-blue: #0C6CA6;
-// $score-purple: #860D4D;
-// $score-orange: #D47312;
-// $score-red: #DE1610;

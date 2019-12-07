@@ -1,0 +1,40 @@
+const wordTypes = [
+  'noun',
+  'verb',
+  'adjective',
+  'pronoun',
+  'proper noun',
+  'adverb',
+  'preposition',
+  'conjunction',
+  'other',
+];
+
+const wordCategories = [
+  'animal',
+  'art',
+  'accomodation/housing',
+  'body',
+  'color',
+  'education',
+  'food/cooking',
+  'greeting',
+  'health',
+  'location',
+  'love',
+  'money',
+  'number',
+  'object',
+  'outdoors',
+  'person',
+  'phrase',
+  'religion',
+  'society/urban',
+  'sport',
+  'time/date',
+  'transportation',
+  'weather',
+  'other',
+];
+
+export { wordTypes, wordCategories };

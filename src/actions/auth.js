@@ -1,4 +1,4 @@
-// /* eslint no-undef: 0 */
+/* eslint no-undef: 0 */
 /* eslint no-console: 0 */
 import { Buffer } from 'buffer';
 
@@ -28,7 +28,6 @@ const signupRequest = (user) => (store) => {
   })
     .then((response) => response.json())
     .then((responseJSON) => {
-      console.log(responseJSON);
       return store.dispatch(setToken(responseJSON.token));
     });
 };

@@ -33,17 +33,20 @@ const updateProfileReq = (profile, lang, words, score) => (store) => {
 
   return fetch(`${API_URL}/profile/${profile.id}`, {
     method: 'PUT', 
-    // ...
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json', // eslint-disable-line
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`, // eslint-disable-line
+    },
+    body: JSON.stringify({ 
+      profile, language: lang, words, score, 
+    }),
   })
-    .set('Authorization', `Bearer ${token}`)
-    .send({ 
-      profile, 
-      language: lang, 
-      words, 
-      score, 
-    })
-    .then((res) => {
-      return store.dispatch(setProfile(res.body));
+    .then((response) => response.json())
+    .then((resJSON) => {
+      return store.dispatch(setProfile(resJSON));
     });
 };
 
@@ -66,9 +69,4 @@ const fetchProfileReq = () => (store) => {
     });
 };
 
-export {
-  setProfile,
-  fetchProfileReq,
-  createProfileReq,
-  updateProfileReq,
-};
+export { fetchProfileReq, createProfileReq, updateProfileReq };
