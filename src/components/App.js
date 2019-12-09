@@ -9,8 +9,6 @@ import { BASE } from '../style/colors';
 
 class App extends React.Component {
   render() {
-    console.log(store.getState()); // eslint-disable-line
-
     return (
       <Provider store={ store }>
         <View style={ styles.base }>
