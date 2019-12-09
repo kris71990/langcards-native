@@ -20,19 +20,19 @@ The `Home Stack` handles authenticated and non-authenticated interaction with th
 
 **Screenshots**
 
-<img src="./screenshots/MainLanding.png" alt="Main Landing" width="200"/>
+<img src="./screenshots/MainLanding.png" alt="Main Landing" width="300"/>
 
 
-<img src="./screenshots/LanguageInfo.png" alt="Language Info" width="200"/>
+<img src="./screenshots/LanguageInfo.png" alt="Language Info" width="300"/>
 
 
-<img src="./screenshots/CardLanding.png" alt="Card Landing" width="200"/>
+<img src="./screenshots/CardLanding.png" alt="Card Landing" width="300"/>
 
 
-<img src="./screenshots/AuthLanding.png" alt="Auth Landing" width="200"/>
+<img src="./screenshots/AuthLanding.png" alt="Auth Landing" width="300"/>
 
 
-<img src="./screenshots/AddForm.png" alt="AddForm" width="200"/>
+<img src="./screenshots/AddForm.png" alt="AddForm" width="300"/>
 
 
 **Component Map**
