@@ -18,6 +18,22 @@ The `Root Stack` is the main navigation handler. It is composed of a Tab Navigat
 
 The `Home Stack` handles authenticated and non-authenticated interaction with the core functionality of the flashcard functions via stack navigation within a single tab of the tab navigator. This entails handling of login/signup, user language selections and additions, and the main flashcard view functionality. 
 
+**Screenshots**
+
+<img src="./screenshots/MainLanding.png" alt="Main Landing" width="200"/>
+
+
+<img src="./screenshots/LanguageInfo.png" alt="Language Info" width="200"/>
+
+
+<img src="./screenshots/CardLanding.png" alt="Card Landing" width="200"/>
+
+
+<img src="./screenshots/AuthLanding.png" alt="Auth Landing" width="200"/>
+
+
+<img src="./screenshots/AddForm.png" alt="AddForm" width="200"/>
+
 
 **Component Map**
 
