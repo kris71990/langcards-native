@@ -1,4 +1,4 @@
-# Polyglot Corner - Mobile App
+# Flashcard Repo - Mobile App
 
 **Author** Kris Sakarias
 
@@ -7,7 +7,7 @@
 
 ## Overview
 
-This is a mobile application version of the [Polyglot Corner](https://github.com/kris71990/lang-flashcards.git) web app. It is built with **React Native**.
+This is a mobile application version of the [Flashcard Repo](https://github.com/kris71990/lang-flashcards.git) web app. It is built with **React Native**.
 
 
 ## Architecture
